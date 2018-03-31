@@ -1,0 +1,14 @@
+{
+  "name": "angular-reactive-validation",
+  "version": "1.0.0-alpha.0",
+  "repository": "https://github.com/davidwalschots/angular-reactive-validation.git",
+  "author": {
+    "name": "David Walschots"
+  },
+  "license": "MIT",
+  "private": false,
+  "peerDependencies": {
+    "@angular/core": "^5.0.0",
+    "@angular/common": "^5.0.0"
+  }
+}
