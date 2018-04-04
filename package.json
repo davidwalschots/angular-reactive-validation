@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:app": "ng build --prod",
-    "build:lib": "rimraf dist && ng-packagr"
+    "build:lib": "rimraf dist && ng-packagr -p angular-reactive-validation/package.json"
   },
   "private": true,
   "dependencies": {

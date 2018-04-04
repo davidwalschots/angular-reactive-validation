@@ -15,9 +15,6 @@
       "es2017",
       "dom"
     ],
-    "baseUrl": "./",
-    "paths": {
-      "angular-reactive-validation": ["dist/angular-reactive-validation"]
-    }
+    "baseUrl": "./"
   }
 }

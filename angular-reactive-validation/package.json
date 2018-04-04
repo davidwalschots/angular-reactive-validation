@@ -10,5 +10,14 @@
   "peerDependencies": {
     "@angular/core": "^5.0.0",
     "@angular/common": "^5.0.0"
+  },
+  "ngPackage": {
+    "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
+    "dest": "../dist/angular-reactive-validation",
+    "workingDirectory": "../.ng_build",
+    "lib": {
+      "entryFile": "src/public_api.ts"
+    },
+    "whitelistedNonPeerDependencies": ["."]
   }
 }
