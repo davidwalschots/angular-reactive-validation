@@ -14,7 +14,12 @@ getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting()
 );
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
+// Then we find all the tests of the app
+const contextApp = require.context('./src', true, /\.spec\.ts$/);
 // And load the modules.
-context.keys().map(context);
+contextApp.keys().map(contextApp);
+
+// Then we find all the tests of the lib
+const contextLib = require.context('./angular-reactive-validation', true, /\.spec\.ts$/);
+// And load the modules.
+contextLib.keys().map(contextLib);
