@@ -31,11 +31,11 @@ export class Validators {
   /**
    * Validator that requires controls to have a value greater than a number.
    */
-  static min(min: number, message: string);
+  static min(min: number, message: string): ValidatorFn;
   /**
    * Validator that requires controls to have a value greater than a number.
    */
-  static min(min: number, messageFunc: ((min: number) => string));
+  static min(min: number, messageFunc: ((min: number) => string)): ValidatorFn;
   static min(min: number, message: string | ((min: number) => string)): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.min, 'min', min, message);
   }
@@ -43,11 +43,11 @@ export class Validators {
   /**
    * Validator that requires controls to have a value less than a number.
    */
-  static max(max: number, message: string);
+  static max(max: number, message: string): ValidatorFn;
   /**
    * Validator that requires controls to have a value less than a number.
    */
-  static max(max: number, messageFunc: ((max: number) => string));
+  static max(max: number, messageFunc: ((max: number) => string)): ValidatorFn;
   static max(max: number, message: string | ((max: number) => string)): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.max, 'max', max, message);
   }
@@ -55,11 +55,11 @@ export class Validators {
   /**
    * Validator that requires controls to have a value of a minimum length.
    */
-  static minLength(minLength: number, message: string);
+  static minLength(minLength: number, message: string): ValidatorFn;
   /**
    * Validator that requires controls to have a value of a minimum length.
    */
-  static minLength(minLength: number, messageFunc: ((minLength: number) => string));
+  static minLength(minLength: number, messageFunc: ((minLength: number) => string)): ValidatorFn;
   static minLength(minLength: number, message: string | ((minLength: number) => string)): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.minLength, 'minlength', minLength, message);
   }
@@ -67,11 +67,11 @@ export class Validators {
   /**
    * Validator that requires controls to have a value of a maximum length.
    */
-  static maxLength(maxLength: number, message: string);
+  static maxLength(maxLength: number, message: string): ValidatorFn;
   /**
    * Validator that requires controls to have a value of a maximum length.
    */
-  static maxLength(maxLength: number, messageFunc: ((maxLength: number) => string));
+  static maxLength(maxLength: number, messageFunc: ((maxLength: number) => string)): ValidatorFn;
   static maxLength(maxLength: number, message: string | ((maxLength: number) => string)): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.maxLength, 'maxlength', maxLength, message);
   }
@@ -79,28 +79,28 @@ export class Validators {
   /**
    * Validator that requires a control to match a regex to its value.
    */
-  static pattern(pattern: string|RegExp, message: string) {
+  static pattern(pattern: string|RegExp, message: string): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.pattern, 'pattern', pattern, message);
   }
 
   /**
    * Validator that requires controls to have a non-empty value.
    */
-  static required(message: string) {
+  static required(message: string): ValidatorFn {
     return Validators.zeroArgumentValidator(AngularValidators.required, 'required', message);
   }
 
   /**
    * Validator that requires control value to be true.
    */
-  static requiredTrue(message: string) {
+  static requiredTrue(message: string): ValidatorFn {
     return Validators.zeroArgumentValidator(AngularValidators.requiredTrue, 'required', message);
   }
 
   /**
    * Validator that performs email validation.
    */
-  static email(message: string) {
+  static email(message: string): ValidatorFn {
     return Validators.zeroArgumentValidator(AngularValidators.email, 'email', message);
   }
 
