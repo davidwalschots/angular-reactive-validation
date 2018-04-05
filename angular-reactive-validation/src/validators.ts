@@ -110,7 +110,7 @@ export class Validators {
       return function(c: AbstractControl): ValidationErrors | null {
         const result = native(c);
 
-        if (result[resultKey]) {
+        if (result && result[resultKey]) {
           if (typeof message === 'function') {
             message = message(input);
           }
@@ -126,7 +126,7 @@ export class Validators {
     return function(c: AbstractControl): ValidationErrors | null {
       const result = validatorFunc(c);
 
-      if (result[resultKey]) {
+      if (result && result[resultKey]) {
         result['message'] = message;
       }
 
