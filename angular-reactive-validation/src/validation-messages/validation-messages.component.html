@@ -1,3 +1,3 @@
-<div *ngIf="!isValid()">
-  INVALID
+<div *ngIf="!isValid()" class="invalid-feedback">
+  <p *ngFor="let message of getErrorMessages()">{{message}}</p>
 </div>
