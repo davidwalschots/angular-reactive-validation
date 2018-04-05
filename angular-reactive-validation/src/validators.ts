@@ -115,7 +115,7 @@ export class Validators {
             message = message(input);
           }
 
-          result['message'] = message;
+          result[resultKey]['message'] = message;
         }
 
         return result;
@@ -127,7 +127,13 @@ export class Validators {
       const result = validatorFunc(c);
 
       if (result && result[resultKey]) {
-        result['message'] = message;
+        // required, requiredTrue and email validators don't set an object, but set a boolean property.
+        // When this happens, we replace the boolean with an object containing the message.
+        if (typeof result[resultKey] === 'boolean') {
+          result[resultKey] = { message: message };
+        } else {
+          result[resultKey]['message'] = message;
+        }
       }
 
       return result;

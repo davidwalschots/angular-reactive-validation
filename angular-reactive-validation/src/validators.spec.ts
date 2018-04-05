@@ -85,9 +85,18 @@ describe('Validators', () => {
         const nativeResult = combination.nativeValidatorFn(control);
         const libraryResult = combination.libraryValidatorFn(control);
 
-        if (libraryResult) {
-          delete libraryResult.message;
+        // Below we perform operations to remove the message property, and replace an empty object
+        // with true. This is not perfect for testing. But, the only way to work around Angular
+        // sometimes using booleans and sometimes objects for specifying validation state.
+        for (const property in libraryResult) {
+          if (libraryResult.hasOwnProperty(property)) {
+            delete libraryResult[property].message;
+            if (Object.getOwnPropertyNames(libraryResult[property]).length === 0) {
+              libraryResult[property] = true;
+            }
+          }
         }
+
         expect(libraryResult).toEqual(nativeResult);
       });
     });
@@ -123,7 +132,7 @@ describe('Validators', () => {
 
     combinations.forEach(combination => {
       const result = combination.validatorFn(combination.control);
-      expect(result.message).toEqual(expectedMessage);
+      expect(result[Object.getOwnPropertyNames(result)[0]].message).toEqual(expectedMessage);
     });
   });
 
@@ -148,7 +157,7 @@ describe('Validators', () => {
 
     combinations.forEach(combination => {
       const result = combination.validatorFn(combination.control);
-      expect(result.message).toEqual(combination.expectedMessage);
+      expect(result[Object.getOwnPropertyNames(result)[0]].message).toEqual(combination.expectedMessage);
     });
   });
 });
