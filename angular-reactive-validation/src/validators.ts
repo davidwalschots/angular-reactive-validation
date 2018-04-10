@@ -35,8 +35,16 @@ export class Validators {
   /**
    * Validator that requires controls to have a value greater than a number.
    */
+  static min(min: () => number, message: string): ValidatorFn;
+  /**
+   * Validator that requires controls to have a value greater than a number.
+   */
   static min(min: number, messageFunc: ((min: number) => string)): ValidatorFn;
-  static min(min: number, message: string | ((min: number) => string)): ValidatorFn {
+  /**
+   * Validator that requires controls to have a value greater than a number.
+   */
+  static min(min: () => number, messageFunc: ((min: number) => string)): ValidatorFn;
+  static min(min: number | (() => number), message: string | ((min: number) => string)): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.min, 'min', min, message);
   }
 
@@ -47,8 +55,16 @@ export class Validators {
   /**
    * Validator that requires controls to have a value less than a number.
    */
+  static max(max: () => number, message: string): ValidatorFn;
+  /**
+   * Validator that requires controls to have a value less than a number.
+   */
   static max(max: number, messageFunc: ((max: number) => string)): ValidatorFn;
-  static max(max: number, message: string | ((max: number) => string)): ValidatorFn {
+  /**
+   * Validator that requires controls to have a value less than a number.
+   */
+  static max(max: () => number, messageFunc: ((max: number) => string)): ValidatorFn;
+  static max(max: number | (() => number), message: string | ((max: number) => string)): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.max, 'max', max, message);
   }
 
@@ -59,8 +75,16 @@ export class Validators {
   /**
    * Validator that requires controls to have a value of a minimum length.
    */
+  static minLength(minLength: () => number, message: string): ValidatorFn;
+  /**
+   * Validator that requires controls to have a value of a minimum length.
+   */
   static minLength(minLength: number, messageFunc: ((minLength: number) => string)): ValidatorFn;
-  static minLength(minLength: number, message: string | ((minLength: number) => string)): ValidatorFn {
+  /**
+   * Validator that requires controls to have a value of a minimum length.
+   */
+  static minLength(minLength: () => number, messageFunc: ((minLength: number) => string)): ValidatorFn;
+  static minLength(minLength: number | (() => number), message: string | ((minLength: number) => string)): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.minLength, 'minlength', minLength, message);
   }
 
@@ -71,15 +95,28 @@ export class Validators {
   /**
    * Validator that requires controls to have a value of a maximum length.
    */
+  static maxLength(maxLength: () => number, message: string): ValidatorFn;
+  /**
+   * Validator that requires controls to have a value of a maximum length.
+   */
   static maxLength(maxLength: number, messageFunc: ((maxLength: number) => string)): ValidatorFn;
-  static maxLength(maxLength: number, message: string | ((maxLength: number) => string)): ValidatorFn {
+  /**
+   * Validator that requires controls to have a value of a maximum length.
+   */
+  static maxLength(maxLength: () => number, messageFunc: ((maxLength: number) => string)): ValidatorFn;
+  static maxLength(maxLength: number | (() => number), message: string | ((maxLength: number) => string)): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.maxLength, 'maxlength', maxLength, message);
   }
 
   /**
    * Validator that requires a control to match a regex to its value.
    */
-  static pattern(pattern: string|RegExp, message: string): ValidatorFn {
+  static pattern(pattern: string|RegExp, message: string): ValidatorFn;
+  /**
+   * Validator that requires a control to match a regex to its value.
+   */
+  static pattern(pattern: () => string|RegExp, message: string): ValidatorFn;
+  static pattern(pattern: (string|RegExp) | (() => string|RegExp), message: string): ValidatorFn {
     return Validators.singleArgumentValidator(AngularValidators.pattern, 'pattern', pattern, message);
   }
 
@@ -105,10 +142,14 @@ export class Validators {
   }
 
   private static singleArgumentValidator<TInput>(validatorFunc: ((TInput) => ValidatorFn), resultKey: string,
-    input: TInput, message: string | ((TInput) => string)): ValidatorFn {
-      const native = validatorFunc(input);
+    input: TInput | (() => TInput), message: string | ((TInput) => string)): ValidatorFn {
       return function(c: AbstractControl): ValidationErrors | null {
-        const result = native(c);
+        if (typeof input === 'function') {
+          input = input();
+        }
+
+        const nativeValidator = validatorFunc(input);
+        const result = nativeValidator(c);
 
         if (result && result[resultKey]) {
           if (typeof message === 'function') {

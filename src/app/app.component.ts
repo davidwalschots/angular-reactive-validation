@@ -19,7 +19,7 @@ export class AppComponent {
         Validators.maxLength(50, (maxLength => `Maximum length is ${maxLength}`))]],
       middleName: ['', [Validators.maxLength(50, (maxLength => `Maximum length is ${maxLength}`))]],
       lastName: ['', [Validators.required('A last name is required'),
-        Validators.maxLength(100, (maxLength => `Maximum length is ${maxLength}`))]]
+        Validators.maxLength(() => 10 * 5, (maxLength => `Maximum length is ${maxLength}`))]]
     }),
     age: [null, [
       Validators.required('An age is required'),

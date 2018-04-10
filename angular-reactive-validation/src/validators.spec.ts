@@ -160,4 +160,40 @@ describe('Validators', () => {
       expect(result[Object.getOwnPropertyNames(result)[0]].message).toEqual(combination.expectedMessage);
     });
   });
+
+  it(`get the validation value by calling the input function when specified`, () => {
+    const combinations = [{
+      validatorFn: Validators.min,
+      fn: () => 100,
+      control: new FormControl(101)
+    }, {
+      validatorFn: Validators.max,
+      fn: () => 100,
+      control: new FormControl(99)
+    }, {
+      validatorFn: Validators.minLength,
+      fn: () => 3,
+      control: new FormControl('abc')
+    }, {
+      validatorFn: Validators.maxLength,
+      fn: () => 5,
+      control: new FormControl('abcd')
+    }];
+
+    const patternValidator = {
+      validatorFn: Validators.pattern,
+      fn: () => /a/,
+      control: new FormControl('a')
+    };
+
+    combinations.forEach(combination => {
+      spyOn(combination, 'fn').and.callThrough();
+      combination.validatorFn(combination.fn, 'test')(combination.control);
+      expect(combination.fn).toHaveBeenCalled();
+    });
+
+    spyOn(patternValidator, 'fn').and.callThrough();
+    patternValidator.validatorFn(patternValidator.fn, 'test')(patternValidator.control);
+    expect(patternValidator.fn).toHaveBeenCalled();
+  });
 });
