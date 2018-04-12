@@ -15,8 +15,8 @@ export class AppComponent {
 
   form = this.fb.group({
     name: this.fb.group({
-      firstName: ['', [Validators.required('A first name is required'),
-        Validators.minLength(10, (minLength => `Minimum length is ${minLength}`)),
+      firstName: ['', [AngularValidators.required,
+        AngularValidators.minLength(10),
         Validators.maxLength(5, (maxLength => `Maximum length is ${maxLength}`))]],
       middleName: ['', [Validators.maxLength(50, (maxLength => `Maximum length is ${maxLength}`))]],
       lastName: ['', [Validators.required('A last name is required'),

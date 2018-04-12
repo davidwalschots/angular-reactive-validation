@@ -10,7 +10,14 @@
       <input formControlName="lastName">
     </label>
     <br />
-    <arv-validation-messages [for]="[form.get('name.firstName'), form.get('name.middleName'), form.get('name.lastName')]"></arv-validation-messages>
+    <arv-validation-messages [for]="[form.get('name.firstName'), form.get('name.middleName'), form.get('name.lastName')]">
+      <arv-validation-message [for]="form.get('name.firstName')" key="required">
+        Required validation test!!!
+      </arv-validation-message>
+      <arv-validation-message [for]="form.get('name.firstName')" key="minlength">
+        minLength validation test!!!
+      </arv-validation-message>
+    </arv-validation-messages>
   </div>
   <label>Age:
     <input type="number" formControlName="age">
