@@ -25,18 +25,30 @@ export class ValidationMessagesComponent {
   }
 
   getErrorMessages(): string[] {
-    const errorMessages = [];
-    this._for.forEach(control => {
-      for (const error in control.errors) {
-        if (control.errors.hasOwnProperty(error)) {
-          const message = control.errors[error].message;
-          if (message) {
-            errorMessages.push(message);
-          }
-        }
+    const errors = this.getFirstErrorPerControl();
+    const messages = [];
+    errors.forEach(error => {
+      if (error.errorObject.message) {
+        messages.push(error.errorObject.message);
+      } else {
+        // Show message within ValidationMessageComponent.
       }
     });
 
-    return errorMessages;
+    return messages;
+  }
+
+  private getFirstErrorPerControl() {
+    return this._for.map(value => {
+      if (value.errors) {
+        return {
+          control: value,
+          key: Object.keys(value.errors)[0],
+          errorObject: value.errors[Object.keys(value.errors)[0]]
+        };
+      } else {
+        return undefined;
+      }
+    }).filter(value => value !== undefined);
   }
 }
