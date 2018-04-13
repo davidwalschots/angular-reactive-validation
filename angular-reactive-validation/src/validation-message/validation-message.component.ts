@@ -1,8 +1,9 @@
-import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { FormControl, ValidationErrors } from '@angular/forms';
+import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, Optional } from '@angular/core';
+import { FormControl, ValidationErrors, ControlContainer } from '@angular/forms';
 import { Error } from '../error';
 import { ValidationMessagesComponent } from '../validation-messages/validation-messages.component';
 import { EventEmitter } from 'events';
+import { getFormControlFromContainer } from '../get-form-control-from-container';
 
 @Component({
   selector: 'arv-validation-message',
@@ -17,13 +18,21 @@ import { EventEmitter } from 'events';
  */
 export class ValidationMessageComponent {
   private _context: ValidationErrors;
+  private _for: FormControl;
+
+  constructor(@Optional() private controlContainer: ControlContainer) { }
 
   @Input()
   /**
    * The FormControl for which a custom validation message should be shown. This is only required when the parent
    * ValidationMessagesComponent has multiple FormControls specified.
    */
-  for: FormControl | undefined;
+  set for(control: FormControl | string) {
+    this._for = typeof control === 'string' ? getFormControlFromContainer(control, this.controlContainer) : control;
+  }
+  get for(): FormControl | string {
+    return this._for;
+  }
 
   @Input()
   /**

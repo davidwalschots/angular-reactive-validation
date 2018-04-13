@@ -9,12 +9,13 @@ To install this library, run:
 **NOT YET AVAILABLE**
 
 ```bash
-$ npm install angular-reactive-validation --save
+npm install angular-reactive-validation --save
 ```
 
 ## Basic usage
 
 Import the `AngularReactiveValidationModule`:
+
 ```ts
 import { AngularReactiveValidationModule } from 'angular-reactive-validation';
 
@@ -55,12 +56,12 @@ Add the component that will display the messages to your HTML:
 ...
 
 <!-- Display validation messages for multiple controls in one location. -->
-<arv-validation-messages [for]="[form.get('name.firstName'), form.get('name.middleName'), form.get('name.lastName')]"></arv-validation-messages>
+<arv-validation-messages [for]="['firstName', 'middleName', 'lastName']"></arv-validation-messages>
 
 ...
 
 <!-- Display validation messages for a single control. -->
-<arv-validation-messages [for]="form.get('age')"></arv-validation-messages>
+<arv-validation-messages for="age"></arv-validation-messages>
 ```
 
 Make changes to the default styling of the validation messages when needed:
@@ -79,26 +80,33 @@ Make changes to the default styling of the validation messages when needed:
 The library supports specifying validators in a number of ways:
 
 With a static message:
+
 ```ts
 Validators.minLength(1, 'The minimum length is not reached.')
 ```
 
 With a dynamic message, which is passed the validation value:
+
 ```ts
 Validators.minLength(1, minLength => `The minimum length is ${minLength}.`)
 ```
 
 With a dynamic validation value:
+
 ```ts
 Validators.minLength(() => this.getMinimumLength(), 'The minimum length is not reached.')
 ```
 
 Or combining the two options above:
+
 ```ts
 Validators.minLength(() => this.getMinimumLength(), minLength => `The minimum length is ${minLength}.`)
 ```
 
-## Handling custom HTML validation messages (edge-case)
+## Edge use cases
+
+### Handling custom HTML validation messages
+
 Though not the purpose of this library. There might be times when you want to declare a validation message within your HTML, because it requires some custom formatting. Therefore, all the `Validators` can also be used without declaring a message:
 
 ```ts
@@ -108,7 +116,7 @@ Validators.minLength(() => this.getMinimumLength())
 And the following HTML can be used:
 
 ```html
-<arv-validation-messages [for]="form.get('age')">
+<arv-validation-messages for="age">
   <arv-validation-message key="min">
     Your custom validation message HTML for the minimum value validation.
   </arv-validation-message>
@@ -118,12 +126,23 @@ And the following HTML can be used:
 If the `arv-validation-messages`'s `for` attribute specifies multiple controls, be sure to declare the `for` attribute on the `arv-validation-message` element as well:
 
 ```html
-<arv-validation-messages [for]="[form.get('name.firstName'), form.get('name.middleName'), form.get('name.lastName')]">
-  <arv-validation-message [for]="form.get('name.firstName')" key="required">
+<arv-validation-messages [for]="['firstName', 'middleName', 'lastName']">
+  <arv-validation-message for="firstName" key="required">
     Your custom validation message HTML for the required validation.
   </arv-validation-message>
-  <arv-validation-message [for]="form.get('name.firstName')" key="minlength">
+  <arv-validation-message for="firstName" key="minlength">
     Your custom validation message HTML for the minlength validation.
+  </arv-validation-message>
+</arv-validation-messages>
+```
+
+### Using arv-validation-messages when not using `[formGroup]` or `formGroupName` attributes
+
+Supplying FormControl instances instead of names is also supported:
+```html
+<arv-validation-messages [for]="[form.get('name.firstName'), form.get('name.middleName'), form.get('name.lastName')]">
+  <arv-validation-message [for]="form.get('name.firstName')" key="required">
+    ...
   </arv-validation-message>
 </arv-validation-messages>
 ```
@@ -132,6 +151,5 @@ If the `arv-validation-messages`'s `for` attribute specifies multiple controls, 
 
 The following features are to be added or are under investigation:
 
-* Using `formControlName` and `formGroupName` instead of `[for]` to reduce syntax complexity within the HTML.
 * Creating your own validators and using them together with this library.
 * Providing interfaces for using other popular validation libraries within `angular-reactive-validation`.
