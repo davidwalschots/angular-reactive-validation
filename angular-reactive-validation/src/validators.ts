@@ -40,6 +40,12 @@ export class Validators {
   static min(min: number, message: string): ValidatorFn;
   /**
    * Validator that requires controls to have a value greater than or equal to a number.
+   * Note: when using this function without specifying a message, you have to declare an
+   * arv-validation-message element in the HTML with a custom message.
+   */
+  static min(min: () => number): ValidatorFn;
+  /**
+   * Validator that requires controls to have a value greater than or equal to a number.
    */
   static min(min: () => number, message: string): ValidatorFn;
   /**
@@ -64,6 +70,12 @@ export class Validators {
    * Validator that requires controls to have a value less than or equal to a number.
    */
   static max(max: number, message: string): ValidatorFn;
+  /**
+   * Validator that requires controls to have a value less than or equal to a number.
+   * Note: when using this function without specifying a message, you have to declare an
+   * arv-validation-message element in the HTML with a custom message.
+   */
+  static max(max: () => number): ValidatorFn;
   /**
    * Validator that requires controls to have a value less than or equal to a number.
    */
@@ -92,6 +104,12 @@ export class Validators {
   static minLength(minLength: number, message: string): ValidatorFn;
   /**
    * Validator that requires controls to have a value of a minimum length.
+   * Note: when using this function without specifying a message, you have to declare an
+   * arv-validation-message element in the HTML with a custom message.
+   */
+  static minLength(minLength: () => number): ValidatorFn;
+  /**
+   * Validator that requires controls to have a value of a minimum length.
    */
   static minLength(minLength: () => number, message: string): ValidatorFn;
   /**
@@ -118,6 +136,12 @@ export class Validators {
   static maxLength(maxLength: number, message: string): ValidatorFn;
   /**
    * Validator that requires controls to have a value of a maximum length.
+   * Note: when using this function without specifying a message, you have to declare an
+   * arv-validation-message element in the HTML with a custom message.
+   */
+  static maxLength(maxLength: () => number): ValidatorFn;
+  /**
+   * Validator that requires controls to have a value of a maximum length.
    */
   static maxLength(maxLength: () => number, message: string): ValidatorFn;
   /**
@@ -142,6 +166,12 @@ export class Validators {
    * Validator that requires a control to match a regex to its value.
    */
   static pattern(pattern: string|RegExp, message: string): ValidatorFn;
+  /**
+   * Validator that requires a control to match a regex to its value.
+   * Note: when using this function without specifying a message, you have to declare an
+   * arv-validation-message element in the HTML with a custom message.
+   */
+  static pattern(pattern: () => string|RegExp): ValidatorFn;
   /**
    * Validator that requires a control to match a regex to its value.
    */
