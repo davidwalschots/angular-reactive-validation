@@ -1,6 +1,6 @@
 # Angular Reactive Validation
 
-I believe reactive validation shouldn't require the developer to write lots of HTML to show validation messages. This library makes that happen.
+I believe Reactive Forms validation shouldn't require the developer to write lots of HTML to show validation messages. This library makes it easy.
 
 ## Installation
 
@@ -139,6 +139,7 @@ If the `arv-validation-messages`'s `for` attribute specifies multiple controls, 
 ### Using arv-validation-messages when not using `[formGroup]` or `formGroupName` attributes
 
 Supplying FormControl instances instead of names is also supported:
+
 ```html
 <arv-validation-messages [for]="[form.get('name.firstName'), form.get('name.middleName'), form.get('name.lastName')]">
   <arv-validation-message [for]="form.get('name.firstName')" key="required">
