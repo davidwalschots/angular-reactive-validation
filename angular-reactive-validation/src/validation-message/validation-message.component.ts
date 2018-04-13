@@ -1,6 +1,8 @@
 import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ValidationErrors } from '@angular/forms';
 import { Error } from '../error';
+import { ValidationMessagesComponent } from '../validation-messages/validation-messages.component';
+import { EventEmitter } from 'events';
 
 @Component({
   selector: 'arv-validation-message',
@@ -10,6 +12,8 @@ import { Error } from '../error';
 /**
  * The ValidationMessageComponent lets the developer specify a custom visual style and custom error message
  * for edge-cases where the standard style or message capabilities do not suffice.
+ *
+ * TODO: Trigger revalidation by parent whenever [for] changes.
  */
 export class ValidationMessageComponent {
   private _context: ValidationErrors;
@@ -36,7 +40,6 @@ export class ValidationMessageComponent {
     this._context = errors;
   }
   get context() {
-    console.log(this._context);
     return this._context;
   }
 

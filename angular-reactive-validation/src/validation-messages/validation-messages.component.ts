@@ -1,7 +1,8 @@
-import { Component, ContentChildren, QueryList, Input, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterContentInit, OnDestroy } from '@angular/core';
 import { FormControl, AbstractControl } from '@angular/forms';
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
 import { Error } from '../error';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'arv-validation-messages',
@@ -13,14 +14,12 @@ import { Error } from '../error';
  * The ValidationMessagesComponent shows validation messages for one to many FormControls. It either shows
  * messages specified within the reactive form model, or shows custom messages declared using the
  * ValidationMessageComponent.
- *
- * TODO: Implement checking if the messageComponents specify the FormControl for which they show messages
- * if the number of FormControls of this component is > 1.
  */
-export class ValidationMessagesComponent {
+export class ValidationMessagesComponent implements AfterContentInit, OnDestroy {
   private _for: FormControl[] = [];
+  private messageComponentChanges: Subscription;
 
-  @ContentChildren(ValidationMessageComponent) messageComponents: QueryList<ValidationMessageComponent>;
+  @ContentChildren(ValidationMessageComponent) private messageComponents: QueryList<ValidationMessageComponent>;
 
   @Input()
   set for(controls: FormControl | FormControl[]) {
@@ -29,6 +28,20 @@ export class ValidationMessagesComponent {
     } else {
       this._for = [controls];
     }
+
+    this.validateChildren();
+  }
+
+  ngAfterContentInit() {
+    this.validateChildren();
+
+    this.messageComponentChanges = this.messageComponents.changes.subscribe(() => {
+      this.validateChildren();
+    });
+  }
+
+  ngOnDestroy() {
+    this.messageComponentChanges.unsubscribe();
   }
 
   isValid(): boolean {
@@ -39,6 +52,27 @@ export class ValidationMessagesComponent {
     const errors = this.getFirstErrorPerControl();
     this.showCustomErrors(errors);
     return this.getErrorMessages(errors);
+  }
+
+  /**
+   * Validates that the child ValidationMessageComponents declare what FormControl they specify a message for (when needed); and
+   * that the declared FormControl is actually part of the parent ValidationMessagesComponent 'for' collection (when specified).
+   */
+  private validateChildren() {
+    if (!this.messageComponents) {
+      return;
+    }
+
+    this.messageComponents.forEach(component => {
+      if (this._for.length > 1 && component.for === undefined) {
+        throw new Error(`Specify the FormControl for which a ValidationMessageComponent with key '${component.key}' ` +
+          `should show messages.`);
+      }
+      if (component.for && this._for.indexOf(component.for) === -1) {
+        throw new Error(`A ValidationMessageComponent with key '${component.key}' attempts to show messages ` +
+          `for a FormControl that is not declared in the parent ValidationMessagesComponent.`);
+      }
+    });
   }
 
   private getErrorMessages(errors: Error[]): string[] {
