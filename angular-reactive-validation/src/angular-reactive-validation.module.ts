@@ -16,5 +16,5 @@ import { ValidationMessageComponent } from './validation-message/validation-mess
     ValidationMessageComponent
   ]
 })
-export class AngularReactiveValidationModule {
+export class ReactiveValidationModule {
 }

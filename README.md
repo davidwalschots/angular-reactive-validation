@@ -14,15 +14,15 @@ npm install angular-reactive-validation --save
 
 ## Basic usage
 
-Import the `AngularReactiveValidationModule`:
+Import the `ReactiveValidationModule`:
 
 ```ts
-import { AngularReactiveValidationModule } from 'angular-reactive-validation';
+import { ReactiveValidationModule } from 'angular-reactive-validation';
 
 @NgModule({
   imports: [
     ...,
-    AngularReactiveValidationModule
+    ReactiveValidationModule
   ]
 })
 export class AppModule { }
