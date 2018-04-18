@@ -1,9 +1,10 @@
 import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterContentInit, OnDestroy, Optional } from '@angular/core';
-import { FormControl, AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
+import { FormControl, ControlContainer, FormGroup } from '@angular/forms';
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
 import { Error } from '../error';
 import { Subscription } from 'rxjs/Subscription';
 import { getFormControlFromContainer } from '../get-form-control-from-container';
+import { getControlPath } from '../get-control-path';
 
 @Component({
   selector: 'arv-validation-messages',
@@ -133,7 +134,7 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
 
       if (!messageComponent) {
         throw new Error(`There is no suitable arv-validation-message element to show the '${error.key}' ` +
-          `error of '${this.getControlPath(error.control)}'`);
+          `error of '${getControlPath(error.control)}'`);
       }
     }
   }
@@ -148,19 +149,5 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
         key: Object.keys(control.errors)[0],
         errorObject: control.errors[Object.keys(control.errors)[0]]
       } : undefined;
-  }
-
-  private getControlPath(control: AbstractControl): string {
-    if (control.parent) {
-      let path = this.getControlPath(control.parent);
-      if (path) {
-        path += '.';
-      }
-      return path + Object.keys(control.parent.controls).find(key => {
-        return control.parent.controls[key] === control;
-      });
-    }
-
-    return '';
   }
 }
