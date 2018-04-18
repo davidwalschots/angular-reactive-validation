@@ -1,6 +1,6 @@
 <div *ngIf="!isValid()">
   <div class="invalid-feedback">
-    <p *ngFor="let message of getErrorMessagesAndShowCustomErrors()">{{message}}</p>
+    <p *ngFor="let message of getErrorMessagesAndValidateCustomErrors()">{{message}}</p>
   </div>
   <ng-content></ng-content>
 </div>

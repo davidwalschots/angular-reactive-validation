@@ -19,6 +19,7 @@ import { getFormControlFromContainer } from '../get-form-control-from-container'
 export class ValidationMessagesComponent implements AfterContentInit, OnDestroy {
   private _for: FormControl[] = [];
   private messageComponentChanges: Subscription;
+  private controlStatusChanges: Subscription[] = [];
 
   constructor(@Optional() private controlContainer: ControlContainer) { }
 
@@ -45,6 +46,7 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
     }
 
     this.validateChildren();
+    this.subscribeToValidityChanges();
   }
 
   ngAfterContentInit() {
@@ -57,15 +59,16 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
 
   ngOnDestroy() {
     this.messageComponentChanges.unsubscribe();
+    this.controlStatusChanges.forEach(subscription => subscription.unsubscribe());
   }
 
   isValid(): boolean {
     return this._for.every(control => control.valid);
   }
 
-  getErrorMessagesAndShowCustomErrors(): string[] {
+  getErrorMessagesAndValidateCustomErrors(): string[] {
     const errors = this.getFirstErrorPerControl();
-    this.showCustomErrors(errors);
+    this.validateCustomErrors(errors);
     return this.getErrorMessages(errors);
   }
 
@@ -90,26 +93,45 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
     });
   }
 
+  private subscribeToValidityChanges() {
+    this.controlStatusChanges.forEach(subscription => subscription.unsubscribe());
+    this.controlStatusChanges.length = 0;
+
+    this._for.forEach(control => {
+      this.controlStatusChanges.push(control.statusChanges.subscribe(() => {
+        this.messageComponents.filter(component => component.for === control || component.for === undefined)
+          .forEach(component => component.reset());
+
+        const error = this.getFirstError(control);
+        if (!error || error.errorObject.message) {
+          return;
+        }
+
+        const messageComponent = this.messageComponents.find(component => {
+          return component.canHandle(error);
+        });
+
+        if (messageComponent) {
+          messageComponent.show(error);
+        }
+      }));
+    });
+  }
+
   private getErrorMessages(errors: Error[]): string[] {
     return errors.filter(error => !!error.errorObject.message)
       .map(error => error.errorObject.message);
   }
 
-  private showCustomErrors(errors: Error[]) {
+  private validateCustomErrors(errors: Error[]) {
     errors = errors.filter(error => !error.errorObject.message);
-
-    this.messageComponents.forEach(component => {
-      component.reset();
-    });
 
     for (const error of errors) {
       const messageComponent = this.messageComponents.find(component => {
         return component.canHandle(error);
       });
 
-      if (messageComponent) {
-        messageComponent.show(error);
-      } else {
+      if (!messageComponent) {
         throw new Error(`There is no suitable arv-validation-message element to show the '${error.key}' ` +
           `error of '${this.getControlPath(error.control)}'`);
       }
@@ -117,17 +139,15 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
   }
 
   private getFirstErrorPerControl(): Error[] {
-    return this._for.map(value => {
-      if (value.errors) {
-        return {
-          control: value,
-          key: Object.keys(value.errors)[0],
-          errorObject: value.errors[Object.keys(value.errors)[0]]
-        };
-      } else {
-        return undefined;
-      }
-    }).filter(value => value !== undefined);
+    return this._for.map(this.getFirstError).filter(value => value !== undefined);
+  }
+
+  private getFirstError(control: FormControl) {
+    return control.errors ? {
+        control: control,
+        key: Object.keys(control.errors)[0],
+        errorObject: control.errors[Object.keys(control.errors)[0]]
+      } : undefined;
   }
 
   private getControlPath(control: AbstractControl): string {

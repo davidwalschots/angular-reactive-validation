@@ -14,8 +14,8 @@
       <arv-validation-message for="firstName" key="required">
         Required validation test!!!
       </arv-validation-message>
-      <arv-validation-message for="firstName" key="minlength">
-        minLength validation test!!!
+      <arv-validation-message #minlengthValidation for="firstName" key="minlength">
+        minLength validation test!!! {{minlengthValidation.context?.requiredLength}}
       </arv-validation-message>
     </arv-validation-messages>
   </div>
