@@ -1,7 +1,7 @@
 import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterContentInit, OnDestroy, Optional } from '@angular/core';
 import { FormControl, ControlContainer, FormGroup } from '@angular/forms';
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
-import { Error } from '../error';
+import { ValidationError } from '../validation-error';
 import { Subscription } from 'rxjs/Subscription';
 import { getFormControlFromContainer } from '../get-form-control-from-container';
 import { getControlPath } from '../get-control-path';
@@ -68,9 +68,11 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
   }
 
   getErrorMessagesAndValidateCustomErrors(): string[] {
-    const errors = this.getFirstErrorPerControl();
-    this.validateCustomErrors(errors);
-    return this.getErrorMessages(errors);
+    const firstErrorPerControl = this._for.map(ValidationError.fromFirstError).filter(value => value !== undefined);
+    this.validateCustomErrors(firstErrorPerControl);
+
+    return firstErrorPerControl.filter(error => error.hasMessage())
+      .map(error => error.getMessage());
   }
 
   /**
@@ -103,8 +105,8 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
         this.messageComponents.filter(component => component.for === control || component.for === undefined)
           .forEach(component => component.reset());
 
-        const error = this.getFirstError(control);
-        if (!error || error.errorObject.message) {
+        const error = ValidationError.fromFirstError(control);
+        if (!error || error.hasMessage()) {
           return;
         }
 
@@ -119,13 +121,8 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
     });
   }
 
-  private getErrorMessages(errors: Error[]): string[] {
-    return errors.filter(error => !!error.errorObject.message)
-      .map(error => error.errorObject.message);
-  }
-
-  private validateCustomErrors(errors: Error[]) {
-    errors = errors.filter(error => !error.errorObject.message);
+  private validateCustomErrors(errors: ValidationError[]) {
+    errors = errors.filter(error => !error.hasMessage());
 
     for (const error of errors) {
       const messageComponent = this.messageComponents.find(component => {
@@ -137,17 +134,5 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
           `error of '${getControlPath(error.control)}'`);
       }
     }
-  }
-
-  private getFirstErrorPerControl(): Error[] {
-    return this._for.map(this.getFirstError).filter(value => value !== undefined);
-  }
-
-  private getFirstError(control: FormControl) {
-    return control.errors ? {
-        control: control,
-        key: Object.keys(control.errors)[0],
-        errorObject: control.errors[Object.keys(control.errors)[0]]
-      } : undefined;
   }
 }

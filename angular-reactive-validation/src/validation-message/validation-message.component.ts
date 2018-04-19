@@ -1,6 +1,6 @@
 import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, Optional } from '@angular/core';
 import { FormControl, ValidationErrors, ControlContainer } from '@angular/forms';
-import { Error } from '../error';
+import { ValidationError } from '../validation-error';
 import { ValidationMessagesComponent } from '../validation-messages/validation-messages.component';
 import { EventEmitter } from 'events';
 import { getFormControlFromContainer } from '../get-form-control-from-container';
@@ -52,11 +52,11 @@ export class ValidationMessageComponent {
     return this._context;
   }
 
-  canHandle(error: Error) {
+  canHandle(error: ValidationError) {
     return (!this.for || error.control === this.for) && error.key === this.key;
   }
 
-  show(error: Error) {
+  show(error: ValidationError) {
     this.context = error.errorObject;
   }
 
