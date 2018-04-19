@@ -21,10 +21,10 @@ import { query } from '@angular/core/src/animation/dsl';
  */
 export class ValidationMessagesComponent implements AfterContentInit, OnDestroy {
   private _for: FormControl[] = [];
-  private messageComponentChanges: Subscription;
   private messageComponentChangesContainer: ObservableContainer<QueryList<ValidationMessageComponent>> =
-    new ObservableContainer(this.validateChildren);
-  private controlStatusChangesContainer: ObservableContainer<FormControl> = new ObservableContainer(this.handleControlStatusChange);
+    new ObservableContainer(() => this.validateChildren());
+  private controlStatusChangesContainer: ObservableContainer<FormControl> =
+    new ObservableContainer(item => this.handleControlStatusChange(item), this);
 
   constructor(@Optional() private controlContainer: ControlContainer) { }
 
@@ -98,10 +98,6 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
   }
 
   private handleControlStatusChange(control: FormControl) {
-    if (!this.messageComponents) {
-      return;
-    }
-
     this.messageComponents.filter(component => component.for === control || component.for === undefined)
       .forEach(component => component.reset());
 
