@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { getFormControlFromContainer } from '../get-form-control-from-container';
 import { getControlPath } from '../get-control-path';
 import { ObservableContainer } from '../observable-container';
-import { query } from '@angular/core/src/animation/dsl';
 
 @Component({
   selector: 'arv-validation-messages',
