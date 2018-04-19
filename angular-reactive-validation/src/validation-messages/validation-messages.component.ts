@@ -5,6 +5,8 @@ import { ValidationError } from '../validation-error';
 import { Subscription } from 'rxjs/Subscription';
 import { getFormControlFromContainer } from '../get-form-control-from-container';
 import { getControlPath } from '../get-control-path';
+import { ObservableContainer } from '../observable-container';
+import { query } from '@angular/core/src/animation/dsl';
 
 @Component({
   selector: 'arv-validation-messages',
@@ -20,7 +22,9 @@ import { getControlPath } from '../get-control-path';
 export class ValidationMessagesComponent implements AfterContentInit, OnDestroy {
   private _for: FormControl[] = [];
   private messageComponentChanges: Subscription;
-  private controlStatusChanges: Subscription[] = [];
+  private messageComponentChangesContainer: ObservableContainer<QueryList<ValidationMessageComponent>> =
+    new ObservableContainer(this.validateChildren);
+  private controlStatusChangesContainer: ObservableContainer<FormControl> = new ObservableContainer(this.handleControlStatusChange);
 
   constructor(@Optional() private controlContainer: ControlContainer) { }
 
@@ -47,20 +51,17 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
     }
 
     this.validateChildren();
-    this.subscribeToValidityChanges();
+    this.controlStatusChangesContainer.unsubscribeAll();
+    this.controlStatusChangesContainer.subscribe(this._for, control => control.statusChanges, true);
   }
 
   ngAfterContentInit() {
-    this.validateChildren();
-
-    this.messageComponentChanges = this.messageComponents.changes.subscribe(() => {
-      this.validateChildren();
-    });
+    this.messageComponentChangesContainer.subscribe(this.messageComponents, queryList => queryList.changes, true);
   }
 
   ngOnDestroy() {
-    this.messageComponentChanges.unsubscribe();
-    this.controlStatusChanges.forEach(subscription => subscription.unsubscribe());
+    this.messageComponentChangesContainer.unsubscribeAll();
+    this.controlStatusChangesContainer.unsubscribeAll();
   }
 
   isValid(): boolean {
@@ -96,29 +97,26 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
     });
   }
 
-  private subscribeToValidityChanges() {
-    this.controlStatusChanges.forEach(subscription => subscription.unsubscribe());
-    this.controlStatusChanges.length = 0;
+  private handleControlStatusChange(control: FormControl) {
+    if (!this.messageComponents) {
+      return;
+    }
 
-    this._for.forEach(control => {
-      this.controlStatusChanges.push(control.statusChanges.subscribe(() => {
-        this.messageComponents.filter(component => component.for === control || component.for === undefined)
-          .forEach(component => component.reset());
+    this.messageComponents.filter(component => component.for === control || component.for === undefined)
+      .forEach(component => component.reset());
 
-        const error = ValidationError.fromFirstError(control);
-        if (!error || error.hasMessage()) {
-          return;
-        }
+    const error = ValidationError.fromFirstError(control);
+    if (!error || error.hasMessage()) {
+      return;
+    }
 
-        const messageComponent = this.messageComponents.find(component => {
-          return component.canHandle(error);
-        });
-
-        if (messageComponent) {
-          messageComponent.show(error);
-        }
-      }));
+    const messageComponent = this.messageComponents.find(component => {
+      return component.canHandle(error);
     });
+
+    if (messageComponent) {
+      messageComponent.show(error);
+    }
   }
 
   private validateCustomErrors(errors: ValidationError[]) {
