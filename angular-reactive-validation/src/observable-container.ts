@@ -13,22 +13,8 @@ export class ObservableContainer<T> {
 
   /**
    * @param nextFunction The function which should be called when the Observable emits.
-   * @param afterContentInitHook An optional argument which is used to hook into the Angular
-   * afterContentInit lifecycle event to only execute calls to the nextFunction after content has been initialized.
    */
-  constructor(private nextFunction: (item: T) => void, private afterContentInitHook?: AfterContentInit) {
-    if (this.afterContentInitHook) {
-      const originalAfterContentInit = this.afterContentInitHook.ngAfterContentInit;
-      this.afterContentInitHook.ngAfterContentInit = () => {
-        originalAfterContentInit.call(this.afterContentInitHook);
-
-        this.functionsToExecuteAfterContentInit.forEach(func => func());
-
-        this.afterContentInitHook.ngAfterContentInit = originalAfterContentInit;
-        this.afterContentInitHook = undefined;
-      };
-    }
-  }
+  constructor(private nextFunction: (item: T) => void) { }
 
   /**
    * Subscribe the given item to the given Observable.
@@ -57,12 +43,12 @@ export class ObservableContainer<T> {
 
     items.forEach(item => {
       const subscription = getObservable(item).subscribe(() => {
-        this.callNextFunction(item);
+        this.nextFunction(item);
       });
       this.subscriptions.push(subscription);
 
       if (callOnSubscribe) {
-        this.callNextFunction(item);
+        this.nextFunction(item);
       }
     });
   }
@@ -73,13 +59,5 @@ export class ObservableContainer<T> {
   unsubscribeAll() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.subscriptions.length = 0;
-  }
-
-  private callNextFunction(item: T) {
-    if (this.afterContentInitHook) {
-      this.functionsToExecuteAfterContentInit.push(() => this.nextFunction(item));
-    } else {
-      this.nextFunction(item);
-    }
   }
 }

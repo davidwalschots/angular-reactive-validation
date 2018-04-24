@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { getFormControlFromContainer } from '../get-form-control-from-container';
 import { getControlPath } from '../get-control-path';
 import { ObservableContainer } from '../observable-container';
+import { executeAfterContentInit } from '../execute-after-content-init';
 
 @Component({
   selector: 'arv-validation-messages',
@@ -23,7 +24,7 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
   private messageComponentChangesContainer: ObservableContainer<QueryList<ValidationMessageComponent>> =
     new ObservableContainer(() => this.validateChildren());
   private controlStatusChangesContainer: ObservableContainer<FormControl> =
-    new ObservableContainer(item => this.handleControlStatusChange(item), this);
+    new ObservableContainer(executeAfterContentInit(item => this.handleControlStatusChange(item), this));
 
   constructor(@Optional() private controlContainer: ControlContainer) { }
 
