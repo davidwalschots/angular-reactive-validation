@@ -1,4 +1,5 @@
-import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterContentInit, OnDestroy, Optional } from '@angular/core';
+import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterContentInit,
+  OnDestroy, Optional, OnInit } from '@angular/core';
 import { FormControl, ControlContainer, FormGroup } from '@angular/forms';
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
 import { ValidationError } from '../validation-error';
@@ -7,6 +8,7 @@ import { getFormControlFromContainer } from '../get-form-control-from-container'
 import { getControlPath } from '../get-control-path';
 import { ObservableContainer } from '../observable-container';
 import { executeAfterContentInit } from '../execute-after-content-init';
+import { FormDirective } from '../form/form.directive';
 
 @Component({
   selector: 'arv-validation-messages',
@@ -19,14 +21,17 @@ import { executeAfterContentInit } from '../execute-after-content-init';
  * messages specified within the reactive form model, or shows custom messages declared using the
  * ValidationMessageComponent.
  */
-export class ValidationMessagesComponent implements AfterContentInit, OnDestroy {
+export class ValidationMessagesComponent implements OnInit, AfterContentInit, OnDestroy {
   private _for: FormControl[] = [];
   private messageComponentChangesContainer: ObservableContainer<QueryList<ValidationMessageComponent>> =
     new ObservableContainer(() => this.validateChildren());
   private controlStatusChangesContainer: ObservableContainer<FormControl> =
     new ObservableContainer(executeAfterContentInit(item => this.handleControlStatusChange(item), this));
 
-  constructor(@Optional() private controlContainer: ControlContainer) { }
+  private formSubmitted = false;
+  private formSubmittedSubscription: Subscription;
+
+  constructor(@Optional() private controlContainer: ControlContainer, @Optional() private formSubmitDirective: FormDirective) { }
 
   @ContentChildren(ValidationMessageComponent) private messageComponents: QueryList<ValidationMessageComponent>;
 
@@ -55,6 +60,14 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
     this.controlStatusChangesContainer.subscribe(this._for, control => control.statusChanges, true);
   }
 
+  ngOnInit() {
+    if (this.formSubmitDirective) {
+      this.formSubmittedSubscription = this.formSubmitDirective.submitted.subscribe(() => {
+        this.formSubmitted = true;
+      });
+    }
+  }
+
   ngAfterContentInit() {
     this.messageComponentChangesContainer.subscribe(this.messageComponents, queryList => queryList.changes, true);
   }
@@ -62,18 +75,26 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
   ngOnDestroy() {
     this.messageComponentChangesContainer.unsubscribeAll();
     this.controlStatusChangesContainer.unsubscribeAll();
+    if (this.formSubmittedSubscription) {
+      this.formSubmittedSubscription.unsubscribe();
+    }
   }
 
   isValid(): boolean {
-    return this._for.every(control => control.valid);
+    return this.getFirstErrorPerControl().length === 0;
   }
 
   getErrorMessagesAndValidateCustomErrors(): string[] {
-    const firstErrorPerControl = this._for.map(ValidationError.fromFirstError).filter(value => value !== undefined);
+    const firstErrorPerControl = this.getFirstErrorPerControl();
     this.validateCustomErrors(firstErrorPerControl);
 
     return firstErrorPerControl.filter(error => error.hasMessage())
       .map(error => error.getMessage());
+  }
+
+  private getFirstErrorPerControl() {
+    return this._for.filter(control => control.touched || this.formSubmitted)
+      .map(ValidationError.fromFirstError).filter(value => value !== undefined);
   }
 
   /**
