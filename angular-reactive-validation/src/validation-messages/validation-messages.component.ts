@@ -84,11 +84,8 @@ export class ValidationMessagesComponent implements OnInit, AfterContentInit, On
     return this.getFirstErrorPerControl().length === 0;
   }
 
-  getErrorMessagesAndValidateCustomErrors(): string[] {
-    const firstErrorPerControl = this.getFirstErrorPerControl();
-    this.validateCustomErrors(firstErrorPerControl);
-
-    return firstErrorPerControl.filter(error => error.hasMessage())
+  getErrorMessages(): string[] {
+    return this.getFirstErrorPerControl().filter(error => error.hasMessage())
       .map(error => error.getMessage());
   }
 
@@ -133,21 +130,9 @@ export class ValidationMessagesComponent implements OnInit, AfterContentInit, On
 
     if (messageComponent) {
       messageComponent.show(error);
-    }
-  }
-
-  private validateCustomErrors(errors: ValidationError[]) {
-    errors = errors.filter(error => !error.hasMessage());
-
-    for (const error of errors) {
-      const messageComponent = this.messageComponents.find(component => {
-        return component.canHandle(error);
-      });
-
-      if (!messageComponent) {
-        throw new Error(`There is no suitable arv-validation-message element to show the '${error.key}' ` +
-          `error of '${getControlPath(error.control)}'`);
-      }
+    } else {
+      throw new Error(`There is no suitable arv-validation-message element to show the '${error.key}' ` +
+        `error of '${getControlPath(error.control)}'`);
     }
   }
 }
