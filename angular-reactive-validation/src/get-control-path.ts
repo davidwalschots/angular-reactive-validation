@@ -9,7 +9,7 @@ import { AbstractControl } from '@angular/forms';
  */
 export function getControlPath(control: AbstractControl): string {
   if (control.parent) {
-    let path = this.getControlPath(control.parent);
+    let path = getControlPath(control.parent);
     if (path) {
       path += '.';
     }
