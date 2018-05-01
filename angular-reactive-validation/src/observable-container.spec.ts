@@ -1,7 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
-
 import { ObservableContainer } from './observable-container';
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 describe('ObservableContainer', () => {
