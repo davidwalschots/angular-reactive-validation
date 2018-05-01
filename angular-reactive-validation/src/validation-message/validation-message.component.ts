@@ -45,10 +45,7 @@ export class ValidationMessageComponent {
    * The ValidationErrors object that contains contextual information about the error, which can be used for
    * displaying, e.g. the minimum length within the error message.
    */
-  set context(errors: ValidationErrors) {
-    this._context = errors;
-  }
-  get context() {
+  get context(): any {
     return this._context;
   }
 
@@ -57,10 +54,10 @@ export class ValidationMessageComponent {
   }
 
   show(error: ValidationError) {
-    this.context = error.errorObject;
+    this._context = error.errorObject;
   }
 
   reset() {
-    this.context = undefined;
+    this._context = undefined;
   }
 }
