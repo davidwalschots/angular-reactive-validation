@@ -1,4 +1,4 @@
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 
 import { getControlPath } from './get-control-path';

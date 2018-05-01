@@ -10,7 +10,7 @@ export function getFormControlFromContainer(name: string, controlContainer: Cont
     if (!(control instanceof FormControl)) {
       throw new Error(`The control named '${name}' ` +
         (controlContainer.path.length > 0 ? `within '${controlContainer.path.join('.')}' ` : '') +
-        `is not a FormControl. Maybe you accidentally referenced a FormGroup?`);
+        `is not a FormControl. Maybe you accidentally referenced a FormGroup or FormArray?`);
     }
 
     return control;
