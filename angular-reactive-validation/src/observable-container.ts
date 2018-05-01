@@ -9,7 +9,6 @@ import { AfterContentInit } from '@angular/core';
  */
 export class ObservableContainer<T> {
   private subscriptions: Subscription[] = [];
-  private functionsToExecuteAfterContentInit: (() => void)[] = [];
 
   /**
    * @param nextFunction The function which should be called when the Observable emits.
