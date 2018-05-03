@@ -12,7 +12,7 @@ describe('ValidationError', () => {
     const error = ValidationError.fromFirstError(control);
 
     expect(error.control).toEqual(control);
-    expect(error.key).toBe('required');
+    expect(error.key).toEqual('required');
     expect(error.errorObject).toEqual(requiredErrorObject);
   });
 
@@ -22,7 +22,7 @@ describe('ValidationError', () => {
     };
     const error = ValidationError.fromFirstError(control);
 
-    expect(error).toBe(undefined);
+    expect(error).toEqual(undefined);
   });
 
   it(`hasMessage returns true when the errorObject contains a message`, () => {
@@ -34,7 +34,7 @@ describe('ValidationError', () => {
       }
     };
     const error = ValidationError.fromFirstError(control);
-    expect(error.hasMessage()).toBe(true);
+    expect(error.hasMessage()).toEqual(true);
   });
 
   it(`hasMessage returns false when the errorObject doesn't contain a message`, () => {
@@ -44,7 +44,7 @@ describe('ValidationError', () => {
       }
     };
     const error = ValidationError.fromFirstError(control);
-    expect(error.hasMessage()).toBe(false);
+    expect(error.hasMessage()).toEqual(false);
   });
 
   it(`getMessage returns the message from the errorObject`, () => {
@@ -57,6 +57,6 @@ describe('ValidationError', () => {
       }
     };
     const error = ValidationError.fromFirstError(control);
-    expect(error.getMessage()).toBe(expected);
+    expect(error.getMessage()).toEqual(expected);
   });
 });

@@ -20,7 +20,7 @@ describe('getControlPath', () => {
       })
     });
 
-    expect(getControlPath(firstName)).toBe('name.firstName');
+    expect(getControlPath(firstName)).toEqual('name.firstName');
   }));
 
   it(`emits numeric paths for form arrays`, inject([FormBuilder], (fb: FormBuilder) => {
@@ -38,14 +38,14 @@ describe('getControlPath', () => {
       ])
     });
 
-    expect(getControlPath(firstName)).toBe('persons.0.firstName');
-    expect(getControlPath(firstName2)).toBe('persons.1.firstName');
+    expect(getControlPath(firstName)).toEqual('persons.0.firstName');
+    expect(getControlPath(firstName2)).toEqual('persons.1.firstName');
   }));
 
   it(`emits an empty string for a control without parents`, inject([FormBuilder], (fb: FormBuilder) => {
     const control = fb.control('');
 
-    expect(getControlPath(control)).toBe('');
+    expect(getControlPath(control)).toEqual('');
   }));
 
   it(`emits an index string for a control with only a form array as parent`, inject([FormBuilder], (fb: FormBuilder) => {
@@ -53,7 +53,7 @@ describe('getControlPath', () => {
 
     fb.array([control]);
 
-    expect(getControlPath(control)).toBe('0');
+    expect(getControlPath(control)).toEqual('0');
   }));
 
   it(`emits a single identifier for a control with only a single form group as parent`, inject([FormBuilder], (fb: FormBuilder) => {
@@ -63,6 +63,6 @@ describe('getControlPath', () => {
       control: control
     });
 
-    expect(getControlPath(control)).toBe('control');
+    expect(getControlPath(control)).toEqual('control');
   }));
 });

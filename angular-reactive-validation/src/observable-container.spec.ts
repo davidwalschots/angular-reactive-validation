@@ -12,9 +12,9 @@ describe('ObservableContainer', () => {
     const container = new ObservableContainer(() => called = true);
 
     container.subscribe({}, () => subject);
-    expect(called).toBe(false);
+    expect(called).toEqual(false);
     subject.next();
-    expect(called).toBe(true);
+    expect(called).toEqual(true);
   });
 
   it(`calls the function on subscribe`, () => {
@@ -22,7 +22,7 @@ describe('ObservableContainer', () => {
     const container = new ObservableContainer(() => called = true);
 
     container.subscribe({}, () => subject, true);
-    expect(called).toBe(true);
+    expect(called).toEqual(true);
   });
 
   it(`calls the function multiple times when the observable emits multiple times`, () => {
@@ -30,29 +30,29 @@ describe('ObservableContainer', () => {
     const container = new ObservableContainer(() => calls++);
 
     container.subscribe({}, () => subject);
-    expect(calls).toBe(0);
+    expect(calls).toEqual(0);
     subject.next();
     subject.next();
-    expect(calls).toBe(2);
+    expect(calls).toEqual(2);
   });
 
   it(`calls the function once per subscribing object`, () => {
     let calls = 0;
-    const objA = {};
-    const objB = {};
+    const objA = { x: 1 };
+    const objB = { x: 2 };
     const container = new ObservableContainer(obj => {
       if (calls === 0) {
-        expect(obj).toEqual(objA);
+        expect(obj).toBe(objA);
       } else {
-        expect(obj).toEqual(objB);
+        expect(obj).toBe(objB);
       }
       calls++;
     });
 
-    container.subscribe([objA, {}], () => subject);
-    expect(calls).toBe(0);
+    container.subscribe([objA, objB], () => subject);
+    expect(calls).toEqual(0);
     subject.next();
-    expect(calls).toBe(2);
+    expect(calls).toEqual(2);
   });
 
   it(`unsubscribes and no longer calls the function when the observable emits`, () => {
@@ -60,13 +60,13 @@ describe('ObservableContainer', () => {
     const container = new ObservableContainer(() => calls++);
 
     container.subscribe([{}, {}], () => subject);
-    expect(subject.observers.length).toBe(2);
+    expect(subject.observers.length).toEqual(2);
 
     container.unsubscribeAll();
-    expect(subject.observers.length).toBe(0);
+    expect(subject.observers.length).toEqual(0);
 
     subject.next();
-    expect(calls).toBe(0);
+    expect(calls).toEqual(0);
   });
 
   it(`doesn't subscribe or call the function when no objects are provided`, () => {
@@ -74,9 +74,9 @@ describe('ObservableContainer', () => {
     const container = new ObservableContainer(() => called = true);
 
     container.subscribe([], () => subject);
-    expect(subject.observers.length).toBe(0);
-    expect(called).toBe(false);
+    expect(subject.observers.length).toEqual(0);
+    expect(called).toEqual(false);
     subject.next();
-    expect(called).toBe(false);
+    expect(called).toEqual(false);
   });
 });

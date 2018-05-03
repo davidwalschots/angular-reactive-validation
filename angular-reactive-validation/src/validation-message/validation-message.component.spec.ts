@@ -24,7 +24,7 @@ describe('ValidationMessageComponent', () => {
 
     const result = component.canHandle(error);
 
-    expect(result).toBe(true);
+    expect(result).toEqual(true);
   });
 
   it(`canHandle returns true when the error key and component key are equal (with for)`, () => {
@@ -34,7 +34,7 @@ describe('ValidationMessageComponent', () => {
 
     const result = component.canHandle(error);
 
-    expect(result).toBe(true);
+    expect(result).toEqual(true);
   });
 
   it(`canHandle returns false when the component 'for' doesn't equal the error's control`, () => {
@@ -44,7 +44,7 @@ describe('ValidationMessageComponent', () => {
 
     const result = component.canHandle(error);
 
-    expect(result).toBe(false);
+    expect(result).toEqual(false);
   });
 
   it(`canHandle returns false when the error key doesn't equal the component key`, () => {
@@ -53,7 +53,7 @@ describe('ValidationMessageComponent', () => {
 
     const result = component.canHandle(error);
 
-    expect(result).toBe(false);
+    expect(result).toEqual(false);
   });
 
   function setupErrorMessageTests(): {
@@ -81,7 +81,7 @@ describe('ValidationMessageComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.message')).not.toBeFalsy();
     expect(fixture.nativeElement.querySelector('.message').textContent)
-      .toBe(`The message is shown. requiredLength: ${error.errorObject.requiredLength}`);
+      .toEqual(`The message is shown. requiredLength: ${error.errorObject.requiredLength}`);
   });
 
   it(`reset hides the error message`, () => {
