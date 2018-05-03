@@ -4,119 +4,113 @@ import { ValidationError } from '../validation-error';
 import { Component, ViewChild } from '@angular/core';
 
 describe('ValidationMessageComponent', () => {
-  function setupCanHandleTests(): { control: any, component: ValidationMessageComponent, error: ValidationError } {
-    const control: any = {
-      errors: {
-        required: true
-      }
-    };
+  describe('canHandle', () => {
+    let control: any;
+    let component: ValidationMessageComponent;
+    let error: ValidationError;
 
-    return {
-      control: control,
-      component: new ValidationMessageComponent(undefined),
-      error: ValidationError.fromFirstError(control)
-    };
-  }
-
-  it(`canHandle returns true when the error key and component key are equal (without for)`, () => {
-    const { control, component, error } = setupCanHandleTests();
-    component.key = 'required';
-
-    const result = component.canHandle(error);
-
-    expect(result).toEqual(true);
-  });
-
-  it(`canHandle returns true when the error key and component key are equal (with for)`, () => {
-    const { control, component, error } = setupCanHandleTests();
-    component.for = control;
-    component.key = 'required';
-
-    const result = component.canHandle(error);
-
-    expect(result).toEqual(true);
-  });
-
-  it(`canHandle returns false when the component 'for' doesn't equal the error's control`, () => {
-    const { control, component, error } = setupCanHandleTests();
-    component.for = <any>{};
-    component.key = 'required';
-
-    const result = component.canHandle(error);
-
-    expect(result).toEqual(false);
-  });
-
-  it(`canHandle returns false when the error key doesn't equal the component key`, () => {
-    const { control, component, error } = setupCanHandleTests();
-    component.key = 'minlength';
-
-    const result = component.canHandle(error);
-
-    expect(result).toEqual(false);
-  });
-
-  function setupErrorMessageTests(): {
-    fixture: ComponentFixture<TestHostComponent>,
-    validationMessageComponent: ValidationMessageComponent
-  } {
-    TestBed.configureTestingModule({
-      declarations: [ValidationMessageComponent, TestHostComponent]
+    beforeEach(() => {
+      control = {
+        errors: {
+          required: true
+        }
+      };
+      component = new ValidationMessageComponent(undefined);
+      error = ValidationError.fromFirstError(control);
     });
 
-    const fixture: ComponentFixture<TestHostComponent> = TestBed.createComponent(TestHostComponent);
-    return {
-      fixture: fixture,
-      validationMessageComponent: fixture.componentInstance.validationMessageComponent
-    };
-  }
+    it(`returns true when the error key and component key are equal (without for)`, () => {
+      component.key = 'required';
 
-  it(`show displays the error message`, () => {
-    const { fixture, validationMessageComponent } = setupErrorMessageTests();
-    const error = ValidationError.fromFirstError(TestHostComponent.getFormControl());
+      const result = component.canHandle(error);
 
-    validationMessageComponent.show(error);
+      expect(result).toEqual(true);
+    });
 
-    expect(fixture.nativeElement.querySelector('.message')).toBeFalsy();
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.message')).not.toBeFalsy();
-    expect(fixture.nativeElement.querySelector('.message').textContent)
-      .toEqual(`The message is shown. requiredLength: ${error.errorObject.requiredLength}`);
+    it(`returns true when the error key and component key are equal (with for)`, () => {
+      component.for = control;
+      component.key = 'required';
+
+      const result = component.canHandle(error);
+
+      expect(result).toEqual(true);
+    });
+
+    it(`returns false when the component 'for' doesn't equal the error's control`, () => {
+      component.for = <any>{};
+      component.key = 'required';
+
+      const result = component.canHandle(error);
+
+      expect(result).toEqual(false);
+    });
+
+    it(`returns false when the error key doesn't equal the component key`, () => {
+      component.key = 'minlength';
+
+      const result = component.canHandle(error);
+
+      expect(result).toEqual(false);
+    });
   });
 
-  it(`reset hides the error message`, () => {
-    const { fixture, validationMessageComponent } = setupErrorMessageTests();
-    const error = ValidationError.fromFirstError(TestHostComponent.getFormControl());
+  describe('error messages', () => {
+    let fixture: ComponentFixture<TestHostComponent>;
+    let validationMessageComponent: ValidationMessageComponent;
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        declarations: [ValidationMessageComponent, TestHostComponent]
+      });
 
-    validationMessageComponent.show(error);
-    validationMessageComponent.reset();
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.message')).toBeFalsy();
-  });
+      fixture = TestBed.createComponent(TestHostComponent);
+      validationMessageComponent = fixture.componentInstance.validationMessageComponent;
+    });
 
-  it(`show sets the context to the error object`, () => {
-    const { fixture, validationMessageComponent } = setupErrorMessageTests();
-    const error = ValidationError.fromFirstError(TestHostComponent.getFormControl());
+    it(`are displayed by the show function`, () => {
+      const error = ValidationError.fromFirstError(TestHostComponent.getFormControl());
 
-    validationMessageComponent.show(error);
-    expect(validationMessageComponent.context).toEqual(error.errorObject);
+      validationMessageComponent.show(error);
+
+      expect(fixture.nativeElement.querySelector('.message')).toBeFalsy();
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('.message')).not.toBeFalsy();
+      expect(fixture.nativeElement.querySelector('.message').textContent)
+        .toEqual(`The message is shown. requiredLength: ${error.errorObject.requiredLength}`);
+    });
+
+    it(`are hidden by the reset function`, () => {
+      const error = ValidationError.fromFirstError(TestHostComponent.getFormControl());
+
+      validationMessageComponent.show(error);
+      fixture.detectChanges();
+      validationMessageComponent.reset();
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('.message')).toBeFalsy();
+    });
+
+    it(`and their context is set by the show function`, () => {
+      const error = ValidationError.fromFirstError(TestHostComponent.getFormControl());
+
+      validationMessageComponent.show(error);
+      expect(validationMessageComponent.context).toEqual(error.errorObject);
+    });
+
+    @Component({
+      template: `
+      <arv-validation-message #minlengthValidation key="minlength">
+        <p class="message">The message is shown. requiredLength: {{minlengthValidation.context?.requiredLength}}</p>
+      </arv-validation-message>`
+    })
+    class TestHostComponent {
+      @ViewChild(ValidationMessageComponent) validationMessageComponent: ValidationMessageComponent;
+
+      static getFormControl(): any {
+        return {
+          errors: {
+            minlength: { requiredLength: 10, actualLength: 5 }
+          }
+        };
+      }
+    }
   });
 });
-
-@Component({
-  template: `
-  <arv-validation-message #minlengthValidation key="minlength">
-    <p class="message">The message is shown. requiredLength: {{minlengthValidation.context?.requiredLength}}</p>
-  </arv-validation-message>`
-})
-class TestHostComponent {
-  @ViewChild(ValidationMessageComponent) validationMessageComponent: ValidationMessageComponent;
-
-  static getFormControl(): any {
-    return {
-      errors: {
-        minlength: { requiredLength: 10, actualLength: 5 }
-      }
-    };
-  }
-}
