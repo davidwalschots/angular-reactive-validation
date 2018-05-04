@@ -31,6 +31,10 @@ export class AppModule { }
 Declare your validation with messages:
 
 ```ts
+import { Validators } from 'angular-reactive-validation';
+
+...
+
 form = this.fb.group({
   name: this.fb.group({
     firstName: ['', [Validators.required('A first name is required'),
