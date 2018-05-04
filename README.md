@@ -64,14 +64,14 @@ Add the component that will display the messages to your HTML:
 <arv-validation-messages for="age"></arv-validation-messages>
 ```
 
-Make changes to the default styling of the validation messages when needed:
+Make changes to the styling of the validation messages when needed by using the `invalid-feedback` class. E.g.:
 
 ```scss
 .invalid-feedback {
   width: 100%;
   margin-top: .25rem;
   font-size: 80%;
-  color: #dc3545;
+  color: red;
 }
 ```
 
@@ -102,6 +102,30 @@ Or combining the two options above:
 ```ts
 Validators.minLength(() => this.getMinimumLength(), minLength => `The minimum length is ${minLength}.`)
 ```
+
+## Changing when validation messages are displayed
+
+By default validation messages are displayed when the associated control is touched, or when the form has been submitted while the `ind-validation-messages` component was instantiated (meaning any hidden elements would not show their validation until a resubmit).
+
+This implementation can be overridden by changing the module import as follows:
+
+```ts
+import { ReactiveValidationModule } from 'angular-reactive-validation';
+
+@NgModule({
+  imports: [
+    ...,
+    ReactiveValidationModule.forRoot({
+      displayValidationMessageWhen: (control, formSubmitted) => {
+        return true; // Replace with your implementation.
+      }
+    })
+  ]
+})
+export class AppModule { }
+```
+
+Note that `formSubmitted` can be undefined when it's not known if the form is submitted, due to the form tag missing a formGroup attribute.
 
 ## Edge use cases
 
@@ -134,6 +158,14 @@ If the `arv-validation-messages`'s `for` attribute specifies multiple controls, 
     Your custom validation message HTML for the minlength validation.
   </arv-validation-message>
 </arv-validation-messages>
+```
+
+Note that unlike the default Angular validation, parameterless functions need to be called to work properly:
+
+```ts
+Validators.required()
+Validators.requiredTrue()
+Validators.email()
 ```
 
 ### Using arv-validation-messages when not using `[formGroup]` or `formGroupName` attributes
