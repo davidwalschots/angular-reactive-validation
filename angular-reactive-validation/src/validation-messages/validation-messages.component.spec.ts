@@ -6,6 +6,8 @@ import { Component } from '@angular/core';
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
 import { Validators } from '../validators';
 import { Subject } from 'rxjs/Subject';
+import { ReactiveValidationModule } from '../reactive-validation.module';
+import { ReactiveValidationModuleConfiguration } from '../public_api';
 
 describe('ValidationMessagesComponent', () => {
   describe('properties and functions', () => {
@@ -62,7 +64,7 @@ describe('ValidationMessagesComponent', () => {
       component.for = [firstNameControl, 'middleName', lastNameControl];
     });
 
-    it(`isValid returns true when there are no controls with ValidationErrors and they are touched`, () => {
+    it(`isValid returns true when there are no controls with ValidationErrors and they are touched (default configuration)`, () => {
       component.for = firstNameControl;
       firstNameControl.setValue('firstName');
       firstNameControl.markAsTouched();
@@ -70,14 +72,14 @@ describe('ValidationMessagesComponent', () => {
       expect(component.isValid()).toEqual(true);
     });
 
-    it(`isValid returns false when there are controls with ValidationErrors and they are touched`, () => {
+    it(`isValid returns false when there are controls with ValidationErrors and they are touched (default configuration)`, () => {
       component.for = [firstNameControl];
       firstNameControl.markAsTouched();
 
       expect(component.isValid()).toEqual(false);
     });
 
-    it(`getErrorMessages returns the first error message per touched control`, () => {
+    it(`getErrorMessages returns the first error message per touched control (default configuration)`, () => {
       component.for = [firstNameControl, middleNameControl, lastNameControl];
       firstNameControl.markAsTouched();
       // We skip middleNameControl on purpose, to ensure that it doesn't return it's error.
@@ -88,39 +90,72 @@ describe('ValidationMessagesComponent', () => {
     });
   });
 
-  describe('validation is shown when', () => {
-    let submittedSubject: Subject<{}>;
+  describe('when in', () => {
     let fixture: ComponentFixture<TestHostComponent>;
 
-    beforeEach(() => {
-      submittedSubject = new Subject<{}>();
-      TestBed.configureTestingModule({
-        imports: [ReactiveFormsModule],
-        declarations: [ValidationMessagesComponent, ValidationMessageComponent, TestHostComponent],
-        providers: [{
-          provide: FormDirective, useValue: {
-            submitted: submittedSubject
-          }
-        }]
+    describe('the default configuration validation is shown when', () => {
+      let submittedSubject: Subject<{}>;
+
+      beforeEach(() => {
+        submittedSubject = new Subject<{}>();
+        TestBed.configureTestingModule({
+          imports: [ReactiveFormsModule],
+          declarations: [ValidationMessagesComponent, ValidationMessageComponent, TestHostComponent],
+          providers: [{
+            provide: FormDirective, useValue: {
+              submitted: submittedSubject
+            }
+          }]
+        });
+
+        fixture = TestBed.createComponent(TestHostComponent);
+        fixture.detectChanges();
       });
 
-      fixture = TestBed.createComponent(TestHostComponent);
-      fixture.detectChanges();
+      it(`the associated control is touched`, () => {
+        fixture.componentInstance.firstNameControl.markAsTouched();
+        fixture.componentInstance.lastNameControl.markAsTouched();
+        fixture.detectChanges();
+
+        expectValidationIsShown();
+      });
+
+      it(`the form has been submitted`, () => {
+        submittedSubject.next();
+        fixture.detectChanges();
+
+        expectValidationIsShown();
+      });
     });
 
-    it(`the associated control is touched`, () => {
-      fixture.componentInstance.firstNameControl.markAsTouched();
-      fixture.componentInstance.lastNameControl.markAsTouched();
-      fixture.detectChanges();
+    describe('an alternative configuration', () => {
+      const configuration: ReactiveValidationModuleConfiguration = {
+        displayValidationMessageWhen: (control, formSubmitted) => true
+      };
 
-      expectValidationIsShown();
-    });
+      beforeEach(() => {
+        spyOn(configuration, 'displayValidationMessageWhen').and.callThrough();
 
-    it(`the form has been submitted`, () => {
-      submittedSubject.next();
-      fixture.detectChanges();
+        TestBed.configureTestingModule({
+          imports: [ReactiveFormsModule, ReactiveValidationModule.forRoot(configuration)],
+          declarations: [TestHostComponent],
+        });
 
-      expectValidationIsShown();
+        fixture = TestBed.createComponent(TestHostComponent);
+      });
+
+      it('validation is shown when displayValidationMessageWhen returns true', () => {
+        expect(configuration.displayValidationMessageWhen).not.toHaveBeenCalled();
+        fixture.detectChanges();
+        expect(configuration.displayValidationMessageWhen).toHaveBeenCalled();
+
+        expectValidationIsShown();
+      });
+
+      it(`displayValidationMessageWhen's formSubmitted is undefined when a FormDirective is not provided`, () => {
+        fixture.detectChanges();
+        expect(configuration.displayValidationMessageWhen).toHaveBeenCalledWith(jasmine.any(FormControl), undefined);
+      });
     });
 
     function expectValidationIsShown() {

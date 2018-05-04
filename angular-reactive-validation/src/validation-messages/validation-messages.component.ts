@@ -1,5 +1,5 @@
 import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterContentInit,
-  OnDestroy, Optional, OnInit } from '@angular/core';
+  OnDestroy, Optional, OnInit, Inject } from '@angular/core';
 import { FormControl, ControlContainer, FormGroup } from '@angular/forms';
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
 import { ValidationError } from '../validation-error';
@@ -9,6 +9,8 @@ import { getControlPath } from '../get-control-path';
 import { ObservableContainer } from '../observable-container';
 import { executeAfterContentInit } from '../execute-after-content-init';
 import { FormDirective } from '../form/form.directive';
+import { ReactiveValidationModuleConfiguration } from '../reactive-validation-module-configuration';
+import { ReactiveValidationModuleConfigurationToken } from '../reactive-validation-module-configuration-token';
 
 @Component({
   selector: 'arv-validation-messages',
@@ -31,7 +33,8 @@ export class ValidationMessagesComponent implements OnInit, AfterContentInit, On
   private formSubmitted = false;
   private formSubmittedSubscription: Subscription;
 
-  constructor(@Optional() private controlContainer: ControlContainer, @Optional() private formSubmitDirective: FormDirective) { }
+  constructor(@Optional() private controlContainer: ControlContainer, @Optional() private formSubmitDirective: FormDirective,
+    @Optional() @Inject(ReactiveValidationModuleConfigurationToken) private configuration: ReactiveValidationModuleConfiguration) { }
 
   @ContentChildren(ValidationMessageComponent) private messageComponents: QueryList<ValidationMessageComponent>;
 
@@ -90,8 +93,10 @@ export class ValidationMessagesComponent implements OnInit, AfterContentInit, On
   }
 
   private getFirstErrorPerControl() {
-    return this._for.filter(control => control.touched || this.formSubmitted)
-      .map(ValidationError.fromFirstError).filter(value => value !== undefined);
+    return this._for.filter(control => this.configuration && this.configuration.displayValidationMessageWhen ?
+      this.configuration.displayValidationMessageWhen(control, this.formSubmitDirective ? this.formSubmitted : undefined) :
+      control.touched || this.formSubmitted
+    ).map(ValidationError.fromFirstError).filter(value => value !== undefined);
   }
 
   /**
