@@ -15,7 +15,6 @@ import { ReactiveValidationModuleConfigurationToken } from '../reactive-validati
 @Component({
   selector: 'arv-validation-messages',
   templateUrl: './validation-messages.component.html',
-  styleUrls: ['./validation-messages.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 /**

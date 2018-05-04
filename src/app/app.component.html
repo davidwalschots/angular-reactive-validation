@@ -11,9 +11,6 @@
     </label>
     <br />
     <arv-validation-messages [for]="['firstName', 'middleName', 'lastName']">
-      <arv-validation-message for="firstName" key="required">
-        Required validation test!!!
-      </arv-validation-message>
       <arv-validation-message #minlengthValidation for="firstName" key="minlength">
         minLength validation test!!! {{minlengthValidation.context?.requiredLength}}
       </arv-validation-message>
