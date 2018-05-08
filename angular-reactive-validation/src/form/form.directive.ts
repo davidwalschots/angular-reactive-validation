@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Directive({
   // tslint:disable-next-line:directive-selector

@@ -3,7 +3,7 @@ import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterC
 import { FormControl, ControlContainer, FormGroup } from '@angular/forms';
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
 import { ValidationError } from '../validation-error';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { getFormControlFromContainer } from '../get-form-control-from-container';
 import { getControlPath } from '../get-control-path';
 import { ObservableContainer } from '../observable-container';
