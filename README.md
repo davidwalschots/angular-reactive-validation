@@ -11,7 +11,7 @@ I believe Reactive Forms validation shouldn't require the developer to write lot
 * [Declaring your own validator functions](#declaring-your-own-validator-functions)
 * [Edge use cases](#edge-use-cases)
   * [Handling custom HTML validation messages](#handling-custom-html-validation-messages)
-  * [Using arv-validation-messages when not using `[formGroup]` or `formGroupName` attributes](#using-arv-validation-messages-when-not-using-[formGroup]-or-formGroupName-attributes)
+  * [Using arv-validation-messages when not using `[formGroup]` or `formGroupName` attributes](#using-arv-validation-messages-when-not-using-formgroup-or-formgroupname-attributes)
 
 ## Installation
 
