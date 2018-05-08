@@ -14,7 +14,12 @@ export function getControlPath(control: AbstractControl): string {
       path += '.';
     }
     return path + Object.keys(control.parent.controls).find(key => {
-      return control.parent.controls[key] === control;
+      const controls = control.parent.controls;
+      if (Array.isArray(controls)) {
+        return controls[Number(key)] === control;
+      } else {
+        return controls[key] === control;
+      }
     });
   }
 

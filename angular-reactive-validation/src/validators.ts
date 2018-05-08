@@ -33,7 +33,7 @@ export class Validators {
    */
   static compose(validators: (ValidatorFn|null|undefined)[]): ValidatorFn|null;
   static compose(validators: (ValidatorFn|null|undefined)[]|null): ValidatorFn|null {
-    return AngularValidators.compose(validators);
+    return validators === null ? AngularValidators.compose(validators) : AngularValidators.compose(validators);
   }
 
   /**

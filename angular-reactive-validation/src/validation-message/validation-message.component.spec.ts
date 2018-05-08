@@ -2,6 +2,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ValidationMessageComponent } from './validation-message.component';
 import { ValidationError } from '../validation-error';
 import { Component, ViewChild } from '@angular/core';
+import { ControlContainer } from '@angular/forms';
 
 describe('ValidationMessageComponent', () => {
   describe('canHandle', () => {
@@ -15,8 +16,9 @@ describe('ValidationMessageComponent', () => {
           required: true
         }
       };
-      component = new ValidationMessageComponent(undefined);
-      error = ValidationError.fromFirstError(control);
+
+      component = new ValidationMessageComponent(<any>undefined);
+      error = <ValidationError>ValidationError.fromFirstError(control);
     });
 
     it(`returns true when the error key and component key are equal (without for)`, () => {
@@ -67,7 +69,7 @@ describe('ValidationMessageComponent', () => {
     });
 
     it(`are displayed by the show function`, () => {
-      const error = ValidationError.fromFirstError(TestHostComponent.getFormControl());
+      const error = <ValidationError>ValidationError.fromFirstError(TestHostComponent.getFormControl());
 
       validationMessageComponent.show(error);
 
@@ -79,7 +81,7 @@ describe('ValidationMessageComponent', () => {
     });
 
     it(`are hidden by the reset function`, () => {
-      const error = ValidationError.fromFirstError(TestHostComponent.getFormControl());
+      const error = <ValidationError>ValidationError.fromFirstError(TestHostComponent.getFormControl());
 
       validationMessageComponent.show(error);
       fixture.detectChanges();
@@ -89,7 +91,7 @@ describe('ValidationMessageComponent', () => {
     });
 
     it(`and their context is set by the show function`, () => {
-      const error = ValidationError.fromFirstError(TestHostComponent.getFormControl());
+      const error = <ValidationError>ValidationError.fromFirstError(TestHostComponent.getFormControl());
 
       validationMessageComponent.show(error);
       expect(validationMessageComponent.context).toEqual(error.errorObject);

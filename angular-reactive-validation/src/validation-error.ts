@@ -5,17 +5,18 @@ export class ValidationError {
   key: string;
   errorObject: ValidationErrors;
 
+  constructor(control: FormControl, key: string, errorObject: ValidationErrors) {
+    this.control = control;
+    this.key = key;
+    this.errorObject = errorObject;
+  }
+
   static fromFirstError(control: FormControl): ValidationError | undefined {
     if (!control.errors) {
       return undefined;
     }
 
-    const error = new ValidationError();
-    error.control = control;
-    error.key = Object.keys(control.errors)[0];
-    error.errorObject = control.errors[Object.keys(control.errors)[0]];
-
-    return error;
+    return new ValidationError(control, Object.keys(control.errors)[0], control.errors[Object.keys(control.errors)[0]]);
   }
 
   hasMessage(): boolean {

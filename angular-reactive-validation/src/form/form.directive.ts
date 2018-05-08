@@ -1,4 +1,4 @@
-import { Directive, OnInit } from '@angular/core';
+import { Directive } from '@angular/core';
 import { FormGroupDirective } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
@@ -9,16 +9,13 @@ import { Observable } from 'rxjs/Observable';
 /**
  * Encapsulates properties and events of the form and makes them available for child components.
  */
-export class FormDirective implements OnInit {
+export class FormDirective {
   /**
    * Observable which emits when the form is submitted.
    */
   submitted: Observable<{}>;
 
-  constructor(private formGroupDirective: FormGroupDirective) {
-  }
-
-  ngOnInit() {
-    this.submitted = this.formGroupDirective.ngSubmit.asObservable();
+  constructor(formGroupDirective: FormGroupDirective) {
+    this.submitted = formGroupDirective.ngSubmit.asObservable();
   }
 }

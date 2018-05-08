@@ -1,5 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
-import { Validators as AngularValidators, ValidatorFn } from '@angular/forms';
+import { Validators as AngularValidators, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 
 import { Validators } from './validators';
@@ -36,7 +36,7 @@ describe('Validators', () => {
       const result = combination.validatorFn(combination.control);
       expect(result).not.toBeNull(
         `A validator deemed the control value '${combination.control.value}' to be valid. This shouldn't be the case`);
-      expect(result.message).toBeUndefined(
+      expect((<ValidationErrors>result).message).toBeUndefined(
         `The angular framework uses the 'message' property. This behaviour is overwritten by the library`);
     });
   });
@@ -83,16 +83,20 @@ describe('Validators', () => {
     combinations.forEach(combination => {
       combination.controls.forEach(control => {
         const nativeResult = combination.nativeValidatorFn(control);
-        const libraryResult = combination.libraryValidatorFn(control);
+        let libraryResult = combination.libraryValidatorFn(control);
+
+        libraryResult = libraryResult;
 
         // Below we perform operations to remove the message property, and replace an empty object
         // with true. This is not perfect for testing. But, the only way to work around Angular
         // sometimes using booleans and sometimes objects for specifying validation state.
-        for (const property in libraryResult) {
-          if (libraryResult.hasOwnProperty(property)) {
-            delete libraryResult[property].message;
-            if (Object.getOwnPropertyNames(libraryResult[property]).length === 0) {
-              libraryResult[property] = true;
+        if (libraryResult) {
+          for (const property in libraryResult) {
+            if (libraryResult.hasOwnProperty(property)) {
+              delete libraryResult[property].message;
+              if (Object.getOwnPropertyNames(libraryResult[property]).length === 0) {
+                libraryResult[property] = true;
+              }
             }
           }
         }
@@ -132,7 +136,8 @@ describe('Validators', () => {
 
     combinations.forEach(combination => {
       const result = combination.validatorFn(combination.control);
-      expect(result[Object.getOwnPropertyNames(result)[0]].message).toEqual(expectedMessage);
+      expect(result).not.toBeNull();
+      expect((<ValidationErrors>result)[Object.getOwnPropertyNames(result)[0]].message).toEqual(expectedMessage);
     });
   });
 
@@ -157,7 +162,8 @@ describe('Validators', () => {
 
     combinations.forEach(combination => {
       const result = combination.validatorFn(combination.control);
-      expect(result[Object.getOwnPropertyNames(result)[0]].message).toEqual(combination.expectedMessage);
+      expect(result).not.toBeNull();
+      expect((<ValidationErrors>result)[Object.getOwnPropertyNames(result)[0]].message).toEqual(combination.expectedMessage);
     });
   });
 

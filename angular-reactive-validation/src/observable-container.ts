@@ -22,7 +22,7 @@ export class ObservableContainer<T> {
    * @param callOnSubscribe Determines if the nextFunction should be called immediately after subscribing, even
    * if the observable hasn't emitted anything. Defaults to false.
    */
-  subscribe<TObservable>(item: T, getObservable: (item: T) => Observable<TObservable>, callOnSubscribe?: boolean);
+  subscribe<TObservable>(item: T, getObservable: (item: T) => Observable<TObservable>, callOnSubscribe?: boolean): void;
   /**
    * Subscribe the given items to the given Observable.
    * @param items The items which should be used when calling the nextFunction provided through the constructor.
@@ -30,8 +30,8 @@ export class ObservableContainer<T> {
    * @param callOnSubscribe Determines if the nextFunction should be called immediately after subscribing, even
    * if the observable hasn't emitted anything. Defaults to false.
    */
-  subscribe<TObservable>(items: T[], getObservable: (item: T) => Observable<TObservable>, callOnSubscribe?: boolean);
-  subscribe<TObservable>(items: T | T[], getObservable: (item: T) => Observable<TObservable>, callOnSubscribe: boolean = false) {
+  subscribe<TObservable>(items: T[], getObservable: (item: T) => Observable<TObservable>, callOnSubscribe?: boolean): void;
+  subscribe<TObservable>(items: T | T[], getObservable: (item: T) => Observable<TObservable>, callOnSubscribe: boolean = false): void {
     if (!items) {
       return;
     }

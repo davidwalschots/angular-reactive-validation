@@ -68,7 +68,7 @@ export class ValidatorDeclaration {
 
   private static validateAndSetMessageIfInvalid(control: AbstractControl,
     validatorFactoryFn: (...args: any[]) => ValidatorFn, resultKey: string,
-    message?: string | ((...args: any[]) => string), ...args: any[]): ValidationErrors {
+    message?: string | ((...args: any[]) => string), ...args: any[]): ValidationErrors | null {
 
       const validationResult = ValidatorDeclaration.validate(control, validatorFactoryFn, ...args);
       ValidatorDeclaration.setMessageIfInvalid(control, resultKey, validationResult, message, ...args);
@@ -76,13 +76,15 @@ export class ValidatorDeclaration {
       return validationResult;
   }
 
-  private static validate(control: AbstractControl, validatorFactoryFn: (...args: any[]) => ValidatorFn, ...args: any[]): ValidationErrors {
-    const wrappedValidatorFn = validatorFactoryFn(...args);
-    return wrappedValidatorFn(control);
+  private static validate(control: AbstractControl, validatorFactoryFn: (...args: any[]) => ValidatorFn, ...args: any[]):
+    ValidationErrors | null {
+
+      const wrappedValidatorFn = validatorFactoryFn(...args);
+      return wrappedValidatorFn(control);
   }
 
   private static setMessageIfInvalid(control: AbstractControl, resultKey: string,
-    validationResult: ValidationErrors, message?: string | ((...args: any[]) => string), ...args: any[]) {
+    validationResult: ValidationErrors | null, message?: string | ((...args: any[]) => string), ...args: any[]) {
     if (message) {
       if (validationResult && validationResult[resultKey]) {
         if (typeof message === 'function') {

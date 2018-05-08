@@ -17,8 +17,8 @@ import { getFormControlFromContainer } from '../get-form-control-from-container'
  * TODO: Trigger revalidation by parent whenever [for] changes.
  */
 export class ValidationMessageComponent {
-  private _context: ValidationErrors;
-  private _for: FormControl;
+  private _context: ValidationErrors | undefined;
+  private _for: FormControl | undefined;
 
   constructor(@Optional() private controlContainer: ControlContainer) { }
 
@@ -27,10 +27,10 @@ export class ValidationMessageComponent {
    * The FormControl for which a custom validation message should be shown. This is only required when the parent
    * ValidationMessagesComponent has multiple FormControls specified.
    */
-  set for(control: FormControl | string) {
+  set for(control: FormControl | string | undefined) {
     this._for = typeof control === 'string' ? getFormControlFromContainer(control, this.controlContainer) : control;
   }
-  get for(): FormControl | string {
+  get for(): FormControl | string | undefined {
     return this._for;
   }
 
@@ -38,7 +38,7 @@ export class ValidationMessageComponent {
   /**
    * The name of the returned validation object property for which the custom validation message should be shown.
    */
-  key: string;
+  key: string | undefined;
 
   @Input()
   /**

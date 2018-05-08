@@ -92,7 +92,7 @@ export class ValidationMessagesComponent implements OnInit, AfterContentInit, On
   }
 
   private getFirstErrorPerControl() {
-    return this._for.filter(control => this.configuration && this.configuration.displayValidationMessageWhen ?
+    return <ValidationError[]>this._for.filter(control => this.configuration && this.configuration.displayValidationMessageWhen ?
       this.configuration.displayValidationMessageWhen(control, this.formSubmitDirective ? this.formSubmitted : undefined) :
       control.touched || this.formSubmitted
     ).map(ValidationError.fromFirstError).filter(value => value !== undefined);
