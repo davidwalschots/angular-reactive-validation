@@ -2,6 +2,17 @@
 
 I believe Reactive Forms validation shouldn't require the developer to write lots of HTML to show validation messages. This library makes it easy.
 
+## Table of contents
+
+* [Installation](#installation)
+* [Basic usage](#basic-usage)
+* [Advanced validation declaration](#advanced-validation-declaration)
+* [Changing when validation messages are displayed](#changing-when-validation-messages-are-displayed)
+* [Declaring your own validator functions](#declaring-your-own-validator-functions)
+* [Edge use cases](#edge-use-cases)
+  * [Handling custom HTML validation messages](#handling-custom-html-validation-messages)
+  * [Using arv-validation-messages when not using `[formGroup]` or `formGroupName` attributes](#using-arv-validation-messages-when-not-using-[formGroup]-or-formGroupName-attributes)
+
 ## Installation
 
 To install this library, run:
@@ -131,6 +142,46 @@ export class AppModule { }
 
 Note that `formSubmitted` can be undefined when it's not known if the form is submitted, due to the form tag missing a formGroup attribute.
 
+## Declaring your own validator functions
+
+Angular provides a limited set of validator functions. To declare your own validator functions _and_ combine it with this library use the `ValidatorDeclaration` class. It supports declaring validators with zero, one or two arguments.
+
+**Note** that if your validator doesn't return an object as the inner error result, but e.g. a `boolean` such as in the examples below, then this will be replaced by an object that can hold the validation message. Thus in the first example below `{ 'hasvalue': true }` becomes `{ 'hasvalue': { 'message': 'validation message' } }`.
+
+```ts
+const hasValueValidator = ValidatorDeclaration.wrapNoArgumentValidator(control => {
+  return !!control.value ? null : { 'hasvalue': true };
+}, 'hasvalue');
+
+const formControl = new FormControl('', hasValueValidator('error message to show'));
+```
+
+```ts
+const minimumValueValidator = ValidatorDeclaration.wrapSingleArgumentValidator((min: number) => {
+  return function(control: AbstractControl): ValidationErrors {
+    return control.value >= min ? null : { 'min': true };
+  };
+}, 'min');
+
+const formControl = new FormControl('', minimumValueValidator(5, 'error message to show'));
+```
+
+```ts
+const betweenValueValidator = ValidatorDeclaration.wrapTwoArgumentValidator((min: number, max: number) => {
+  return function(control: AbstractControl): ValidationErrors {
+    return control.value >= min && control.value <= max ? null : { 'between': true };
+  };
+}, 'between');
+
+const formControl = new FormControl('', betweenValueValidator(5, 10, 'error message to show'));
+```
+
+Wrapping validator functions provided by other packages is also very simple:
+
+```ts
+const minValidator = ValidatorDeclaration.wrapSingleArgumentValidator(AngularValidators.min, 'min')
+```
+
 ## Edge use cases
 
 ### Handling custom HTML validation messages
@@ -183,10 +234,3 @@ Supplying FormControl instances instead of names is also supported:
   </arv-validation-message>
 </arv-validation-messages>
 ```
-
-## Future development
-
-The following features are to be added or are under investigation:
-
-* Creating your own validators and using them together with this library.
-* Providing interfaces for using other popular validation libraries within `angular-reactive-validation`.

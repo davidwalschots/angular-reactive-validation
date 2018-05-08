@@ -1,13 +1,21 @@
-import { Validators as AngularValidators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Validators as AngularValidators, ValidatorFn } from '@angular/forms';
+import { ValidatorDeclaration } from './validator-declaration';
 
 /**
  * Provides a set of validators used by form controls.
  *
  * Code comments have been copied from the Angular source code.
- *
- * @dynamic
  */
 export class Validators {
+  private static minValidator = ValidatorDeclaration.wrapSingleArgumentValidator(AngularValidators.min, 'min');
+  private static maxValidator = ValidatorDeclaration.wrapSingleArgumentValidator(AngularValidators.max, 'max');
+  private static minLengthValidator = ValidatorDeclaration.wrapSingleArgumentValidator(AngularValidators.minLength, 'minlength');
+  private static maxLengthValidator = ValidatorDeclaration.wrapSingleArgumentValidator(AngularValidators.maxLength, 'maxlength');
+  private static patternValidator = ValidatorDeclaration.wrapSingleArgumentValidator(AngularValidators.pattern, 'pattern');
+  private static requiredValidator = ValidatorDeclaration.wrapNoArgumentValidator(AngularValidators.required, 'required');
+  private static requiredTrueValidator = ValidatorDeclaration.wrapNoArgumentValidator(AngularValidators.requiredTrue, 'required');
+  private static emailValidator = ValidatorDeclaration.wrapNoArgumentValidator(AngularValidators.email, 'email');
+
   /**
    * No-op validator.
    */
@@ -57,7 +65,7 @@ export class Validators {
    */
   static min(min: () => number, messageFunc: ((min: number) => string)): ValidatorFn;
   static min(min: number | (() => number), message?: string | ((min: number) => string)): ValidatorFn {
-    return Validators.singleArgumentValidator(AngularValidators.min, 'min', min, message);
+    return Validators.minValidator(min, message);
   }
 
   /**
@@ -89,7 +97,7 @@ export class Validators {
    */
   static max(max: () => number, messageFunc: ((max: number) => string)): ValidatorFn;
   static max(max: number | (() => number), message?: string | ((max: number) => string)): ValidatorFn {
-    return Validators.singleArgumentValidator(AngularValidators.max, 'max', max, message);
+    return Validators.maxValidator(max, message);
   }
 
   /**
@@ -121,7 +129,7 @@ export class Validators {
    */
   static minLength(minLength: () => number, messageFunc: ((minLength: number) => string)): ValidatorFn;
   static minLength(minLength: number | (() => number), message?: string | ((minLength: number) => string)): ValidatorFn {
-    return Validators.singleArgumentValidator(AngularValidators.minLength, 'minlength', minLength, message);
+    return Validators.minLengthValidator(minLength, message);
   }
 
   /**
@@ -153,7 +161,7 @@ export class Validators {
    */
   static maxLength(maxLength: () => number, messageFunc: ((maxLength: number) => string)): ValidatorFn;
   static maxLength(maxLength: number | (() => number), message?: string | ((maxLength: number) => string)): ValidatorFn {
-    return Validators.singleArgumentValidator(AngularValidators.maxLength, 'maxlength', maxLength, message);
+    return Validators.maxLengthValidator(maxLength, message);
   }
 
   /**
@@ -177,7 +185,7 @@ export class Validators {
    */
   static pattern(pattern: () => string|RegExp, message: string): ValidatorFn;
   static pattern(pattern: (string|RegExp) | (() => string|RegExp), message?: string): ValidatorFn {
-    return Validators.singleArgumentValidator(AngularValidators.pattern, 'pattern', pattern, message);
+    return Validators.patternValidator(pattern, message);
   }
 
   /**
@@ -191,7 +199,7 @@ export class Validators {
    */
   static required(message: string): ValidatorFn;
   static required(message?: string): ValidatorFn {
-    return Validators.zeroArgumentValidator(AngularValidators.required, 'required', message);
+    return Validators.requiredValidator(message);
   }
 
   /**
@@ -205,7 +213,7 @@ export class Validators {
    */
   static requiredTrue(message: string): ValidatorFn;
   static requiredTrue(message?: string): ValidatorFn {
-    return Validators.zeroArgumentValidator(AngularValidators.requiredTrue, 'required', message);
+    return Validators.requiredTrueValidator(message);
   }
 
   /**
@@ -219,50 +227,6 @@ export class Validators {
    */
   static email(message: string): ValidatorFn;
   static email(message?: string): ValidatorFn {
-    return Validators.zeroArgumentValidator(AngularValidators.email, 'email', message);
-  }
-
-  private static singleArgumentValidator<TInput>(validatorFunc: ((TInput) => ValidatorFn), resultKey: string,
-    input: TInput | (() => TInput), message?: string | ((TInput) => string)): ValidatorFn {
-      return function(c: AbstractControl): ValidationErrors | null {
-        if (typeof input === 'function') {
-          input = input();
-        }
-
-        const nativeValidator = validatorFunc(input);
-        const result = nativeValidator(c);
-
-        if (message) {
-          if (result && result[resultKey]) {
-            if (typeof message === 'function') {
-              message = message(input);
-            }
-
-            result[resultKey]['message'] = message;
-          }
-        }
-
-        return result;
-      };
-  }
-
-  private static zeroArgumentValidator(validatorFunc: ValidatorFn, resultKey: string, message?: string) {
-    return function(c: AbstractControl): ValidationErrors | null {
-      const result = validatorFunc(c);
-
-      if (message) {
-        if (result && result[resultKey]) {
-          // required, requiredTrue and email validators don't set an object, but set a boolean property.
-          // When this happens, we replace the boolean with an object containing the message.
-          if (typeof result[resultKey] === 'boolean') {
-            result[resultKey] = { message: message };
-          } else {
-            result[resultKey]['message'] = message;
-          }
-        }
-      }
-
-      return result;
-    };
+    return Validators.emailValidator(message);
   }
 }
