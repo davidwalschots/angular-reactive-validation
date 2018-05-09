@@ -1,5 +1,4 @@
 import { Observable, Subscription } from 'rxjs';
-import { AfterContentInit } from '@angular/core';
 
 /**
  * Manages subscribing and unsubscribing to an Observable and executing

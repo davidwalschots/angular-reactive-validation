@@ -1,8 +1,7 @@
-import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, Optional } from '@angular/core';
+import { Component, Input, ViewEncapsulation, Optional } from '@angular/core';
 import { FormControl, ValidationErrors, ControlContainer } from '@angular/forms';
+
 import { ValidationError } from '../validation-error';
-import { ValidationMessagesComponent } from '../validation-messages/validation-messages.component';
-import { EventEmitter } from 'events';
 import { getFormControlFromContainer } from '../get-form-control-from-container';
 
 @Component({

@@ -1,5 +1,6 @@
-import { ObservableContainer } from './observable-container';
 import { Subject } from 'rxjs';
+
+import { ObservableContainer } from './observable-container';
 
 describe('ObservableContainer', () => {
   let subject: Subject<{}>;

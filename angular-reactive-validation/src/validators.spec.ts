@@ -1,5 +1,4 @@
-import { TestBed, async } from '@angular/core/testing';
-import { Validators as AngularValidators, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { Validators as AngularValidators, ValidationErrors } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 
 import { Validators } from './validators';

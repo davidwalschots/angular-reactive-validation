@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
-import { FormDirective } from './form.directive';
 import { By } from '@angular/platform-browser';
+
+import { FormDirective } from './form.directive';
 
 describe('FormDirective', () => {
   it(`submitted observable emits when the form is submitted`, () => {

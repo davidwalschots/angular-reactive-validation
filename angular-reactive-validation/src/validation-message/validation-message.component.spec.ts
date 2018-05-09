@@ -1,8 +1,8 @@
+import { Component, ViewChild } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+
 import { ValidationMessageComponent } from './validation-message.component';
 import { ValidationError } from '../validation-error';
-import { Component, ViewChild } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
 
 describe('ValidationMessageComponent', () => {
   describe('canHandle', () => {

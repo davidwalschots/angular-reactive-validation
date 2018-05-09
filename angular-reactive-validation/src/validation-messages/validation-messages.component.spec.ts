@@ -1,13 +1,14 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { ValidationMessagesComponent } from './validation-messages.component';
-import { ControlContainer, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { FormDirective } from '../form/form.directive';
 import { Component } from '@angular/core';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { ControlContainer, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+
+import { ValidationMessagesComponent } from './validation-messages.component';
+import { FormDirective } from '../form/form.directive';
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
 import { Validators } from '../validators';
-import { Subject } from 'rxjs';
 import { ReactiveValidationModule } from '../reactive-validation.module';
-import { ReactiveValidationModuleConfiguration } from '../public_api';
+import { ReactiveValidationModuleConfiguration } from '../reactive-validation-module-configuration';
 
 describe('ValidationMessagesComponent', () => {
   describe('properties and functions', () => {
