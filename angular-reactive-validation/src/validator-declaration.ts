@@ -30,9 +30,9 @@ export class ValidatorDeclaration {
 
       return function (arg1: TInput | (() => TInput), message?: string | ((arg1: TInput) => string)): ValidatorFn {
         return function(control: AbstractControl): ValidationErrors | null {
-          arg1 = ValidatorDeclaration.unwrapArgument(arg1);
+          const unwrappedArg1 = ValidatorDeclaration.unwrapArgument(arg1);
 
-          return ValidatorDeclaration.validateAndSetMessageIfInvalid(control, validatorFactoryFn, resultKey, message, arg1);
+          return ValidatorDeclaration.validateAndSetMessageIfInvalid(control, validatorFactoryFn, resultKey, message, unwrappedArg1);
         };
       };
   }
@@ -50,10 +50,11 @@ export class ValidatorDeclaration {
         message?: string | ((arg1: TInput1, arg2: TInput2) => string)): ValidatorFn {
 
           return function(control: AbstractControl): ValidationErrors | null {
-            arg1 = ValidatorDeclaration.unwrapArgument(arg1);
-            arg2 = ValidatorDeclaration.unwrapArgument(arg2);
+            const unwrappedArg1 = ValidatorDeclaration.unwrapArgument(arg1);
+            const unwrappedArg2 = ValidatorDeclaration.unwrapArgument(arg2);
 
-            return ValidatorDeclaration.validateAndSetMessageIfInvalid(control, validatorFactoryFn, resultKey, message, arg1, arg2);
+            return ValidatorDeclaration.validateAndSetMessageIfInvalid(control, validatorFactoryFn, resultKey, message,
+              unwrappedArg1, unwrappedArg2);
           };
       };
   }
