@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:app": "ng build --prod",
-    "build:lib": "rimraf dist && ng-packagr -p angular-reactive-validation/package.json"
+    "build:lib": "rimraf dist && ng-packagr -p angular-reactive-validation/package.json && rimraf dist/angular-reactive-validation.tgz && cpx README.md dist/angular-reactive-validation",
+    "publish": "npm publish dist/angular-reactive-validation"
   },
   "private": true,
   "dependencies": {
@@ -25,7 +26,8 @@
     "core-js": "^2.4.1",
     "rxjs": "^6.1.0",
     "tslib": "^1.9.0",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "cpx": "^1.5.0"
   },
   "devDependencies": {
     "@angular/cli": "6.0.0",

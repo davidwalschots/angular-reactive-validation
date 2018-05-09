@@ -17,8 +17,6 @@ I believe Reactive Forms validation shouldn't require the developer to write lot
 
 To install this library, run:
 
-**NOT YET AVAILABLE**
-
 ```bash
 npm install angular-reactive-validation --save
 ```
