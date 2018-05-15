@@ -47,23 +47,16 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
 
   @Input()
   set for(controls: FormControl | (FormControl|string)[] | string) {
-    if (Array.isArray(controls)) {
-      if (controls.length === 0) {
-        throw new Error(`arv-validation-messages doesn't allow declaring an empty array as input to the 'for' attribute.`);
-      }
-
-      this._for = controls.map(control => {
-        if (typeof control === 'string') {
-          return getFormControlFromContainer(control, this.controlContainer);
-        } else {
-          return control;
-        }
-      });
-    } else if (typeof controls === 'string') {
-      this._for = [getFormControlFromContainer(controls, this.controlContainer)];
-    } else {
-      this._for = [controls];
+    if (!Array.isArray(controls)) {
+      controls = controls !== undefined ? [controls] : [];
     }
+
+    if (controls.length === 0) {
+      throw new Error(`arv-validation-messages doesn't allow declaring an empty array as input to the 'for' attribute.`);
+    }
+
+    this._for = controls.map(control => typeof control === 'string' ?
+      getFormControlFromContainer(control, this.controlContainer) : control);
 
     this.validateChildren();
     this.controlStatusChangesContainer.unsubscribeAll();
