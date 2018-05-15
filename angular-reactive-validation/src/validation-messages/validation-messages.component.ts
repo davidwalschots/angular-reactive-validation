@@ -1,5 +1,5 @@
 import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterContentInit,
-  OnDestroy, Optional, OnInit, Inject } from '@angular/core';
+  OnDestroy, Optional, Inject } from '@angular/core';
 import { FormControl, ControlContainer } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -23,18 +23,25 @@ import { ReactiveValidationModuleConfigurationToken } from '../reactive-validati
  * messages specified within the reactive form model, or shows custom messages declared using the
  * ValidationMessageComponent.
  */
-export class ValidationMessagesComponent implements OnInit, AfterContentInit, OnDestroy {
+export class ValidationMessagesComponent implements AfterContentInit, OnDestroy {
   private _for: FormControl[] = [];
   private messageComponentChangesContainer: ObservableContainer<QueryList<ValidationMessageComponent>> =
     new ObservableContainer(() => this.validateChildren());
   private controlStatusChangesContainer: ObservableContainer<FormControl> =
     new ObservableContainer(executeAfterContentInit(item => this.handleControlStatusChange(item), this));
 
-  private formSubmitted = false;
+  private formSubmitted: boolean | undefined = undefined;
   private formSubmittedSubscription: Subscription;
 
-  constructor(@Optional() private controlContainer: ControlContainer, @Optional() private formSubmitDirective: FormDirective,
-    @Optional() @Inject(ReactiveValidationModuleConfigurationToken) private configuration: ReactiveValidationModuleConfiguration) { }
+  constructor(@Optional() private controlContainer: ControlContainer, @Optional() formSubmitDirective: FormDirective,
+    @Optional() @Inject(ReactiveValidationModuleConfigurationToken) private configuration: ReactiveValidationModuleConfiguration) {
+      if (formSubmitDirective) {
+        this.formSubmitted = false;
+        this.formSubmittedSubscription = formSubmitDirective.submitted.subscribe(() => {
+          this.formSubmitted = true;
+        });
+      }
+    }
 
   @ContentChildren(ValidationMessageComponent) private messageComponents: QueryList<ValidationMessageComponent>;
 
@@ -63,14 +70,6 @@ export class ValidationMessagesComponent implements OnInit, AfterContentInit, On
     this.controlStatusChangesContainer.subscribe(this._for, control => control.statusChanges, true);
   }
 
-  ngOnInit() {
-    if (this.formSubmitDirective) {
-      this.formSubmittedSubscription = this.formSubmitDirective.submitted.subscribe(() => {
-        this.formSubmitted = true;
-      });
-    }
-  }
-
   ngAfterContentInit() {
     this.messageComponentChangesContainer.subscribe(this.messageComponents, queryList => queryList.changes, true);
   }
@@ -94,8 +93,7 @@ export class ValidationMessagesComponent implements OnInit, AfterContentInit, On
 
   private getFirstErrorPerControl() {
     return <ValidationError[]>this._for.filter(control => this.configuration && this.configuration.displayValidationMessageWhen ?
-      this.configuration.displayValidationMessageWhen(control, this.formSubmitDirective ? this.formSubmitted : undefined) :
-      control.touched || this.formSubmitted
+      this.configuration.displayValidationMessageWhen(control, this.formSubmitted) : control.touched || this.formSubmitted
     ).map(ValidationError.fromFirstError).filter(value => value !== undefined);
   }
 
