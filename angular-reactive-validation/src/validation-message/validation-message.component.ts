@@ -39,7 +39,6 @@ export class ValidationMessageComponent {
    */
   key: string | undefined;
 
-  @Input()
   /**
    * The ValidationErrors object that contains contextual information about the error, which can be used for
    * displaying, e.g. the minimum length within the error message.
