@@ -1,6 +1,6 @@
 # Angular Reactive Validation
 
-I believe Reactive Forms validation shouldn't require the developer to write lots of HTML to show validation messages. This library makes it easy.
+Reactive Forms validation shouldn't require the developer to write lots of HTML to show validation messages. This library makes it easy.
 
 ## Table of contents
 
@@ -66,15 +66,11 @@ See [Advanced validation declaration](#advanced-validation-declaration) for othe
 Add the component that will display the messages to your HTML:
 
 ```html
-...
+<!-- Display validation messages for a single control. -->
+<arv-validation-messages for="age"></arv-validation-messages>
 
 <!-- Display validation messages for multiple controls in one location. -->
 <arv-validation-messages [for]="['firstName', 'middleName', 'lastName']"></arv-validation-messages>
-
-...
-
-<!-- Display validation messages for a single control. -->
-<arv-validation-messages for="age"></arv-validation-messages>
 ```
 
 Make changes to the styling of the validation messages when needed by using the `invalid-feedback` class. E.g.:
@@ -118,7 +114,7 @@ Validators.minLength(() => this.getMinimumLength(), minLength => `The minimum le
 
 ## Changing when validation messages are displayed
 
-By default validation messages are displayed when the associated control is touched, or when the form has been submitted while the `ind-validation-messages` component was instantiated (meaning any hidden elements would not show their validation until a resubmit).
+By default validation messages are displayed when the associated control is touched, or when the form has been submitted while the `arv-validation-messages` component was instantiated (meaning any hidden elements would not show their validation until a resubmit).
 
 This implementation can be overridden by changing the module import as follows:
 
