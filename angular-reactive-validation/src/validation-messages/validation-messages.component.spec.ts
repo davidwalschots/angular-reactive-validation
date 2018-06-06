@@ -242,27 +242,56 @@ describe('ValidationMessagesComponent', () => {
       .toThrowError(`There is no suitable arv-validation-message element to show the 'required' error of ''`);
   });
 
-  xit(`validates child validation message as they are shown or hidden through *ngIf`, () => {
-    @Component({
-      template: `
-        <arv-validation-messages [for]="firstNameControl">
-          <arv-validation-message *ngIf="show" [for]="lastNameControl" key="required"></arv-validation-message>
-        </arv-validation-messages>`
-    })
-    class TestHostComponent {
-      firstNameControl: FormControl = new FormControl(null);
-      lastNameControl: FormControl = new FormControl(null);
-      show = false;
-    }
-
-    TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [ValidationMessagesComponent, ValidationMessageComponent, TestHostComponent]
+  describe('', () => {
+    let onerrorBeforeTest: ErrorEventHandler;
+    beforeEach(() => {
+      onerrorBeforeTest = window.onerror;
+    });
+    afterEach(() => {
+      window.onerror = onerrorBeforeTest;
     });
 
-    const fixture = TestBed.createComponent(TestHostComponent);
-    fixture.detectChanges();
-    fixture.componentInstance.show = true;
-    expect(() => fixture.detectChanges()).toThrowError();
+    it(`validates child validation message as they are shown or hidden through *ngIf`, (done: Function) => {
+      @Component({
+        template: `
+          <arv-validation-messages [for]="firstNameControl">
+            <arv-validation-message *ngIf="show" [for]="lastNameControl" key="required"></arv-validation-message>
+          </arv-validation-messages>`
+      })
+      class TestHostComponent {
+        firstNameControl: FormControl = new FormControl(null);
+        lastNameControl: FormControl = new FormControl(null);
+        show = false;
+      }
+
+      TestBed.configureTestingModule({
+        imports: [ReactiveFormsModule],
+        declarations: [ValidationMessagesComponent, ValidationMessageComponent, TestHostComponent]
+      });
+
+      // We can't simply expect().toThrowError(), because in RxJS 6, any error inside of 'next'
+      // is asynchronously thrown, instead of synchronously as before. So these errors will never reach the call stack
+      // of the expect() function. The observables also isn't exposed, and therefore we need to resort to catching
+      // the error through window.onerror.
+      window.onerror = event => {
+        if (isErrorEvent(event)) {
+          expect(event.error.message).toEqual(`A arv-validation-messages element with key 'required' attempts to show messages ` +
+            `for a FormControl that is not declared in the parent arv-validation-messages element.`);
+          done();
+
+          // Though window.onerror is quirky, returning false generally works to suppress the error from reaching the console.
+          return false;
+        }
+      };
+
+      const fixture = TestBed.createComponent(TestHostComponent);
+      fixture.detectChanges();
+      fixture.componentInstance.show = true;
+      fixture.detectChanges();
+    });
   });
 });
+
+function isErrorEvent(event: Event | string): event is ErrorEvent {
+  return (<ErrorEvent>event).error !== undefined;
+}
