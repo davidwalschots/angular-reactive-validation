@@ -2,8 +2,7 @@ import { Observable, Subscription } from 'rxjs';
 
 /**
  * Manages subscribing and unsubscribing to an Observable and executing
- * a function when that Observable emits. Also handles hooking into
- * Angular afterContentInit lifecycle event.
+ * a function when that Observable emits.
  */
 export class ObservableContainer<T> {
   private subscriptions: Subscription[] = [];
