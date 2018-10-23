@@ -60,7 +60,7 @@ export class ValidatorDeclaration {
   }
 
   private static unwrapArgument<T>(arg: T | (() => T)): T {
-    if (typeof arg === 'function') {
+    if (arg instanceof Function) {
       arg = arg();
     }
 

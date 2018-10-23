@@ -54,15 +54,15 @@ describe('ValidationMessagesComponent', () => {
     });
 
     it(`for property handles a single input string`, () => {
-      component.for = 'firstName';
+      expect(() => component.for = 'firstName').not.toThrow();
     });
 
     it(`for property handles a single input FormControl`, () => {
-      component.for = firstNameControl;
+      expect(() => component.for = firstNameControl).not.toThrow();
     });
 
     it(`for property handles an array with strings and FormControls`, () => {
-      component.for = [firstNameControl, 'middleName', lastNameControl];
+      expect(() => component.for = [firstNameControl, 'middleName', lastNameControl]).not.toThrow();
     });
 
     it(`isValid returns true when there are no controls with ValidationErrors and they are touched (default configuration)`, () => {
