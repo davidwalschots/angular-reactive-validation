@@ -18,6 +18,9 @@
   ],
   "license": "MIT",
   "private": false,
+  "dependencies": {
+    "angular-validation-support": "1.0.0"
+  },
   "peerDependencies": {
     "@angular/core": "^7.0.0",
     "@angular/common": "^7.0.0",
@@ -31,6 +34,8 @@
     "lib": {
       "entryFile": "src/public_api.ts"
     },
-    "whitelistedNonPeerDependencies": ["."]
+    "whitelistedNonPeerDependencies": [
+      "."
+    ]
   }
 }
