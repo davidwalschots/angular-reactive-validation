@@ -242,7 +242,7 @@ describe('ValidationMessagesComponent', () => {
       .toThrowError(`There is no suitable arv-validation-message element to show the 'required' error of ''`);
   });
 
-  describe('', () => {
+  xdescribe('', () => {
     let onerrorBeforeTest: ErrorEventHandler;
     beforeEach(() => {
       onerrorBeforeTest = window.onerror;
