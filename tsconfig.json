@@ -22,7 +22,12 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "angular-reactive-validation": ["./dist/angular-reactive-validation"]
+      "angular-reactive-validation": [
+        "./dist/angular-reactive-validation"
+      ],
+      "core-js/es7/reflect": [
+        "node_modules/core-js/proposals/reflect-metadata",
+      ]
     }
   }
 }
