@@ -8,7 +8,6 @@ import { FormDirective } from '../form/form.directive';
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
 import { Validators } from '../validators';
 import { ReactiveValidationModule } from '../reactive-validation.module';
-import { ReactiveValidationModuleConfiguration } from '../reactive-validation-module-configuration';
 
 describe('ValidationMessagesComponent', () => {
   describe('properties and functions', () => {
@@ -130,8 +129,8 @@ describe('ValidationMessagesComponent', () => {
     });
 
     describe('an alternative configuration', () => {
-      const configuration: ReactiveValidationModuleConfiguration = {
-        displayValidationMessageWhen: (control, formSubmitted) => true
+      const configuration = {
+        displayValidationMessageWhen: () => true
       };
 
       beforeEach(() => {
@@ -243,7 +242,7 @@ describe('ValidationMessagesComponent', () => {
   });
 
   xdescribe('', () => {
-    let onerrorBeforeTest: ErrorEventHandler;
+    let onerrorBeforeTest: OnErrorEventHandler;
     beforeEach(() => {
       onerrorBeforeTest = window.onerror;
     });

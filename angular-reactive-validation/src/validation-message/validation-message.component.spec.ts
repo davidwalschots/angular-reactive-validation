@@ -104,7 +104,7 @@ describe('ValidationMessageComponent', () => {
       </arv-validation-message>`
     })
     class TestHostComponent {
-      @ViewChild(ValidationMessageComponent) validationMessageComponent: ValidationMessageComponent;
+      @ViewChild(ValidationMessageComponent, {static: true}) validationMessageComponent: ValidationMessageComponent;
 
       static getFormControl(): any {
         return {

@@ -1,7 +1,7 @@
 {
   "name": "angular-reactive-validation",
   "description": "Reactive Forms validation shouldn't require the developer to write lots of HTML to show validation messages. This library makes it easy.",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/davidwalschots/angular-reactive-validation.git"
@@ -19,13 +19,13 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "angular-validation-support": "1.0.0"
+    "angular-validation-support": "2.0.0"
   },
   "peerDependencies": {
-    "@angular/core": "^7.0.0",
-    "@angular/common": "^7.0.0",
-    "@angular/forms": "^7.0.0",
-    "rxjs": "^6.1.0"
+    "@angular/core": "^8.0.0",
+    "@angular/common": "^8.0.0",
+    "@angular/forms": "^8.0.0",
+    "rxjs": "^6.5.2"
   },
   "ngPackage": {
     "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
