@@ -1,8 +1,8 @@
-import { Component, Input, ViewEncapsulation, Optional } from '@angular/core';
+import { Component, Input, ViewEncapsulation, Optional, OnInit } from '@angular/core';
 import { FormControl, ValidationErrors, ControlContainer } from '@angular/forms';
 
 import { ValidationError } from '../validation-error';
-import { getFormControlFromContainer } from '../get-form-control-from-container';
+import { getFormControlFromContainer, isControlContainerVoidOrInitialized } from '../get-form-control-from-container';
 
 @Component({
   selector: 'arv-validation-message',
@@ -15,7 +15,7 @@ import { getFormControlFromContainer } from '../get-form-control-from-container'
  *
  * TODO: Trigger revalidation by parent whenever [for] changes.
  */
-export class ValidationMessageComponent {
+export class ValidationMessageComponent implements OnInit {
   private _context: ValidationErrors | undefined;
   private _for: FormControl | undefined;
 
@@ -27,6 +27,10 @@ export class ValidationMessageComponent {
    * ValidationMessagesComponent has multiple FormControls specified.
    */
   set for(control: FormControl | string | undefined) {
+    if (!isControlContainerVoidOrInitialized(this.controlContainer)) {
+      this.initializeForOnInit = () => this.for = control;
+      return;
+    }
     this._for = typeof control === 'string' ? getFormControlFromContainer(control, this.controlContainer) : control;
   }
   get for(): FormControl | string | undefined {
@@ -39,12 +43,18 @@ export class ValidationMessageComponent {
    */
   key: string | undefined;
 
+  private initializeForOnInit = () => {};
+
   /**
    * The ValidationErrors object that contains contextual information about the error, which can be used for
    * displaying, e.g. the minimum length within the error message.
    */
   get context(): any {
     return this._context;
+  }
+
+  ngOnInit() {
+    this.initializeForOnInit();
   }
 
   canHandle(error: ValidationError) {

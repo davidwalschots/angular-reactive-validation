@@ -12,7 +12,7 @@ describe(`ReactiveValidationModule`, () => {
     });
 
     it(`should not provide configuration`, () => {
-      expect(() => TestBed.get(ReactiveValidationModuleConfigurationToken)).toThrowError(/No provider for/);
+      expect(() => TestBed.inject(ReactiveValidationModuleConfigurationToken)).toThrowError(/No provider for/);
     });
   });
 
@@ -29,7 +29,7 @@ describe(`ReactiveValidationModule`, () => {
     });
 
     it(`should provide configuration`, () => {
-      expect(TestBed.get(ReactiveValidationModuleConfigurationToken)).toEqual(configuration);
+      expect(TestBed.inject(ReactiveValidationModuleConfigurationToken)).toEqual(configuration);
     });
   });
 });

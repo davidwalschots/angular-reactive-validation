@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { ControlContainer, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormGroup, FormControl, ReactiveFormsModule, FormGroupDirective } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 import { ValidationMessagesComponent } from './validation-messages.component';
@@ -33,14 +33,13 @@ describe('ValidationMessagesComponent', () => {
         lastName: lastNameControl
       });
 
-      const controlContainer: any = {
-        control: formGroup
-      };
+      const formGroupDirective: FormGroupDirective = new FormGroupDirective([], []);
+      formGroupDirective.form = formGroup;
 
       TestBed.configureTestingModule({
         declarations: [ValidationMessagesComponent],
         providers: [
-          { provide: ControlContainer, useValue: controlContainer }
+          { provide: ControlContainer, useValue: formGroupDirective }
         ]
       });
 
@@ -239,6 +238,39 @@ describe('ValidationMessagesComponent', () => {
     const fixture = TestBed.createComponent(TestHostComponent);
     expect(() => fixture.detectChanges())
       .toThrowError(`There is no suitable arv-validation-message element to show the 'required' error of ''`);
+  });
+
+  it('can set control by name without exception being thrown due to ControlContainer not yet being initialized', () => {
+    @Component({
+      template: `
+        <form [formGroup]="form">
+          <input type="number" formControlName="age">
+          <arv-validation-messages for="age"></arv-validation-messages>
+        </form>
+      `
+    })
+    class TestHostComponent {
+      age = new FormControl(0, [
+        Validators.min(10, 'invalid age')
+      ]);
+      form = new FormGroup({
+        age: this.age
+      });
+
+      @ViewChild(ValidationMessagesComponent, { static: true }) validationMessagesComponent: ValidationMessagesComponent;
+    }
+
+    TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule],
+      declarations: [ValidationMessagesComponent, ValidationMessageComponent, TestHostComponent]
+    });
+
+    expect(() => {
+      const fixture = TestBed.createComponent(TestHostComponent);
+      fixture.componentInstance.age.markAsTouched();
+      fixture.detectChanges();
+      expect(fixture.componentInstance.validationMessagesComponent.getErrorMessages()).toEqual(['invalid age']);
+    }).not.toThrow();
   });
 
   xdescribe('', () => {

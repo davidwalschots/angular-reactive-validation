@@ -1,17 +1,15 @@
 import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterContentInit,
-  OnDestroy, Optional, Inject } from '@angular/core';
+  OnDestroy, Optional, Inject, OnInit } from '@angular/core';
 import { FormControl, ControlContainer } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
 import { ValidationError } from '../validation-error';
-import { getFormControlFromContainer } from '../get-form-control-from-container';
-import { getControlPath } from 'angular-validation-support';
-import { ObservableContainer } from 'angular-validation-support';
-import { executeAfterContentInit } from 'angular-validation-support';
+import { getFormControlFromContainer, isControlContainerVoidOrInitialized } from '../get-form-control-from-container';
 import { FormDirective } from '../form/form.directive';
 import { ReactiveValidationModuleConfiguration } from '../reactive-validation-module-configuration';
 import { ReactiveValidationModuleConfigurationToken } from '../reactive-validation-module-configuration-token';
+import { getControlPath } from '../get-control-path';
 
 @Component({
   selector: 'arv-validation-messages',
@@ -23,30 +21,39 @@ import { ReactiveValidationModuleConfigurationToken } from '../reactive-validati
  * messages specified within the reactive form model, or shows custom messages declared using the
  * ValidationMessageComponent.
  */
-export class ValidationMessagesComponent implements AfterContentInit, OnDestroy {
+export class ValidationMessagesComponent implements AfterContentInit, OnDestroy, OnInit {
   private _for: FormControl[] = [];
-  private messageComponentChangesContainer: ObservableContainer<QueryList<ValidationMessageComponent>> =
-    new ObservableContainer(() => this.validateChildren());
-  private controlStatusChangesContainer: ObservableContainer<FormControl> =
-    new ObservableContainer(executeAfterContentInit(item => this.handleControlStatusChange(item), this));
+  private messageComponentsChangesSubscription = new Subscription();
+  private controlStatusChangesSubscription = new Subscription();
 
   private formSubmitted: boolean | undefined = undefined;
-  private formSubmittedSubscription: Subscription;
+  private formSubmittedSubscription = new Subscription();
+
+  @ContentChildren(ValidationMessageComponent) private messageComponents: QueryList<ValidationMessageComponent>;
+
+  private initializeForOnInit = () => {};
 
   constructor(@Optional() private controlContainer: ControlContainer, @Optional() formSubmitDirective: FormDirective,
     @Optional() @Inject(ReactiveValidationModuleConfigurationToken) private configuration: ReactiveValidationModuleConfiguration) {
       if (formSubmitDirective) {
         this.formSubmitted = false;
-        this.formSubmittedSubscription = formSubmitDirective.submitted.subscribe(() => {
+        this.formSubmittedSubscription.add(formSubmitDirective.submitted.subscribe(() => {
           this.formSubmitted = true;
-        });
+        }));
       }
-    }
+  }
 
-  @ContentChildren(ValidationMessageComponent) private messageComponents: QueryList<ValidationMessageComponent>;
+  ngOnInit() {
+    this.initializeForOnInit();
+  }
 
   @Input()
   set for(controls: FormControl | (FormControl|string)[] | string) {
+    if (!isControlContainerVoidOrInitialized(this.controlContainer)) {
+      this.initializeForOnInit = () => this.for = controls;
+      return;
+    }
+
     if (!Array.isArray(controls)) {
       controls = controls !== undefined ? [controls] : [];
     }
@@ -59,20 +66,29 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
       getFormControlFromContainer(control, this.controlContainer) : control);
 
     this.validateChildren();
-    this.controlStatusChangesContainer.unsubscribeAll();
-    this.controlStatusChangesContainer.subscribe(this._for, control => control.statusChanges, true);
+
+    this.controlStatusChangesSubscription.unsubscribe();
+    this.controlStatusChangesSubscription = new Subscription();
+    this._for.forEach(control => {
+      this.controlStatusChangesSubscription.add(control.statusChanges.subscribe(() => {
+        this.handleControlStatusChange(control);
+      }));
+    });
   }
 
   ngAfterContentInit() {
-    this.messageComponentChangesContainer.subscribe(this.messageComponents, queryList => queryList.changes, true);
+    this.messageComponents.changes.subscribe(this.validateChildren);
+    this.validateChildren();
+
+    this._for.forEach(control => {
+      this.handleControlStatusChange(control);
+    });
   }
 
   ngOnDestroy() {
-    this.messageComponentChangesContainer.unsubscribeAll();
-    this.controlStatusChangesContainer.unsubscribeAll();
-    if (this.formSubmittedSubscription) {
-      this.formSubmittedSubscription.unsubscribe();
-    }
+    this.messageComponentsChangesSubscription.unsubscribe();
+    this.formSubmittedSubscription.unsubscribe();
+    this.controlStatusChangesSubscription.unsubscribe();
   }
 
   isValid(): boolean {
@@ -112,6 +128,10 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy 
   }
 
   private handleControlStatusChange(control: FormControl) {
+    if (!this.messageComponents) {
+      return;
+    }
+
     this.messageComponents.filter(component => component.for === control || component.for === undefined)
       .forEach(component => component.reset());
 

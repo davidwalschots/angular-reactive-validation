@@ -3,6 +3,8 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 
 import { ValidationMessageComponent } from './validation-message.component';
 import { ValidationError } from '../validation-error';
+import { Validators } from '../validators';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 describe('ValidationMessageComponent', () => {
   describe('canHandle', () => {
@@ -114,5 +116,37 @@ describe('ValidationMessageComponent', () => {
         };
       }
     }
+  });
+
+  it('can set control by name without exception being thrown due to ControlContainer not yet being initialized', () => {
+    @Component({
+      template: `
+      <form [formGroup]="form">
+        <arv-validation-message for="age" key="min">
+        </arv-validation-message>
+      </form>
+      `
+    })
+    class TestHostComponent {
+      age = new FormControl(0, [
+        Validators.min(10, 'invalid age')
+      ]);
+      form = new FormGroup({
+        age: this.age
+      });
+
+      @ViewChild(ValidationMessageComponent, { static: true }) validationMessageComponent: ValidationMessageComponent;
+    }
+
+    TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule],
+      declarations: [ValidationMessageComponent, TestHostComponent]
+    });
+
+    expect(() => {
+      const fixture = TestBed.createComponent(TestHostComponent);
+      fixture.detectChanges();
+      expect(fixture.componentInstance.validationMessageComponent.for).toBe(fixture.componentInstance.age);
+    }).not.toThrow();
   });
 });

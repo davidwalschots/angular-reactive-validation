@@ -23,7 +23,7 @@ import { ReactiveValidationModuleConfigurationToken } from './reactive-validatio
   ]
 })
 export class ReactiveValidationModule {
-  static forRoot(configuration?: ReactiveValidationModuleConfiguration): ModuleWithProviders {
+  static forRoot(configuration?: ReactiveValidationModuleConfiguration): ModuleWithProviders<ReactiveValidationModule> {
     return {
       ngModule: ReactiveValidationModule,
       providers: [{
