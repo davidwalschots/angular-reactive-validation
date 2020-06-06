@@ -46,19 +46,13 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    Contents: '*.tgz'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/npm'
-  displayName: 'Copy package'
-
-- task: CopyFiles@2
-  inputs:
-    sourceFolder: '$(Build.SourcesDirectory)/angular-reactive-validation/'
-    contents: 'angular-reactive-validation/package.json' 
+    sourceFolder: '$(Build.SourcesDirectory)/dist/angular-reactive-validation/'
+    contents: '**' 
     targetFolder: $(Build.ArtifactStagingDirectory)/npm
-  displayName: 'Copy package.json'
+  displayName: 'Copy artifacts'
 
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/npm'
     artifactName: npm
-  displayName: 'Publish npm artifact'
+  displayName: 'Publish npm artifacts'
