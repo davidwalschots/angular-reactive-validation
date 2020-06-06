@@ -40,3 +40,18 @@ steps:
     codeCoverageTool: 'Cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml'
   displayName: 'Publish Code Coverage Results'
+
+- script: npm pack $(Build.SourcesDirectory)/dist/angular-reactive-validation
+  displayName: 'Create Package'
+
+- task: CopyFiles@2
+  inputs:
+    Contents: '*.tgz'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/npm'
+    CleanTargetFolder: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/npm'
+    artifactName: npm
+  displayName: 'Publish npm artifact'
