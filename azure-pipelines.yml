@@ -21,6 +21,19 @@ steps:
 - script: npm run build:lib
   displayName: 'Build Library'
 
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)/dist/angular-reactive-validation/'
+    contents: '**' 
+    targetFolder: $(Build.ArtifactStagingDirectory)/npm
+  displayName: 'Copy artifacts'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/npm'
+    artifactName: npm
+  displayName: 'Publish npm artifacts'
+
 - script: npm run build:app
   displayName: 'Build App'
 
@@ -40,19 +53,3 @@ steps:
     codeCoverageTool: 'Cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml'
   displayName: 'Publish Code Coverage Results'
-
-- script: npm pack $(Build.SourcesDirectory)/dist/angular-reactive-validation
-  displayName: 'Create Package'
-
-- task: CopyFiles@2
-  inputs:
-    sourceFolder: '$(Build.SourcesDirectory)/dist/angular-reactive-validation/'
-    contents: '**' 
-    targetFolder: $(Build.ArtifactStagingDirectory)/npm
-  displayName: 'Copy artifacts'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/npm'
-    artifactName: npm
-  displayName: 'Publish npm artifacts'
