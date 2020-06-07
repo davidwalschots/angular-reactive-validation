@@ -77,7 +77,7 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy,
   }
 
   ngAfterContentInit() {
-    this.messageComponents.changes.subscribe(this.validateChildren);
+    this.messageComponentsChangesSubscription.add(this.messageComponents.changes.subscribe(this.validateChildren));
     this.validateChildren();
 
     this._for.forEach(control => {
