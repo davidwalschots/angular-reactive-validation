@@ -20,9 +20,9 @@
   "private": false,
   "dependencies": {},
   "peerDependencies": {
-    "@angular/core": "^9.0.0",
-    "@angular/common": "^9.0.0",
-    "@angular/forms": "^9.0.0",
+    "@angular/core": "^11.0.0",
+    "@angular/common": "^11.0.0",
+    "@angular/forms": "^11.0.0",
     "rxjs": "^6.5.4"
   },
   "ngPackage": {
