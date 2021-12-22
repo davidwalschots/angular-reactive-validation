@@ -8,7 +8,7 @@
     "test": "ng test --watch=true",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:app": "ng build --prod",
+    "build:app": "ng build --configuration production",
     "build:lib": "rimraf dist && ng-packagr -p angular-reactive-validation/package.json && rimraf dist/angular-reactive-validation.tgz && cpx README.md dist/angular-reactive-validation",
     "publish": "npm publish dist/angular-reactive-validation"
   },
