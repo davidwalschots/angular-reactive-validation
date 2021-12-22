@@ -23,7 +23,7 @@
     "@angular/core": "^12.2.15",
     "@angular/common": "^12.2.15",
     "@angular/forms": "^12.2.15",
-    "rxjs": "^6.5.4"
+    "rxjs": "^6.6.7"
   },
   "ngPackage": {
     "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
@@ -31,7 +31,7 @@
     "lib": {
       "entryFile": "src/public_api.ts"
     },
-    "whitelistedNonPeerDependencies": [
+    "allowedNonPeerDependencies": [
       "."
     ]
   }
