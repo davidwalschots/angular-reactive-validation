@@ -1,27 +1,44 @@
-<form [formGroup]="form">
-  <div formGroupName="name">
-    <label>First name:
-      <input formControlName="firstName">
+<link
+  href="https://cdn.jsdelivr.net/npm/cirrus-ui@0.6.2/dist/cirrus.min.css"
+  rel="stylesheet"
+/>
+<div class="p-6 w-80">
+  <form [formGroup]="form">
+    <div formGroupName="name">
+      <label
+        >First name:
+        <input formControlName="firstName" />
+      </label>
+      <label
+        >Middle name:
+        <input formControlName="middleName" />
+      </label>
+      <label
+        >Last name:
+        <input formControlName="lastName" />
+      </label>
+      <br />
+      <arv-validation-messages [for]="['firstName', 'middleName', 'lastName']">
+        <arv-validation-message
+          #minlengthValidation
+          for="firstName"
+          key="minlength"
+        >
+          minLength validation test!!!
+          {{ minlengthValidation.context?.requiredLength }}
+        </arv-validation-message>
+      </arv-validation-messages>
+    </div>
+    <div>
+    <label
+      >Age:
+      <input type="number" formControlName="age" />
     </label>
-    <label>Middle name:
-      <input formControlName="middleName">
-    </label>
-    <label>Last name:
-      <input formControlName="lastName">
-    </label>
+    <arv-validation-messages for="age"></arv-validation-messages>
     <br />
-    <arv-validation-messages [for]="['firstName', 'middleName', 'lastName']">
-      <arv-validation-message #minlengthValidation for="firstName" key="minlength">
-        minLength validation test!!! {{minlengthValidation.context?.requiredLength}}
-      </arv-validation-message>
-    </arv-validation-messages>
   </div>
-  <label>Age:
-    <input type="number" formControlName="age">
-  </label>
-  <arv-validation-messages for="age"></arv-validation-messages>
-  <br />
-  <input type="submit" />
-</form>
-<p>Form value: {{ form.value | json }}</p>
-<p>Form status: {{ form.status | json }}</p>
+    <input type="submit" class="btn-primary"/>
+  </form>
+  <p>Form value: {{ form.value | json }}</p>
+  <p>Form status: {{ form.status | json }}</p>
+</div>
