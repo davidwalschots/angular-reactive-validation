@@ -8,8 +8,6 @@ import { Validators } from 'angular-reactive-validation';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private fb: FormBuilder) {
-  }
 
   title = 'app';
 
@@ -28,4 +26,7 @@ export class AppComponent {
       Validators.max(150, (max => `Can't be more than ${max}`))
     ]]
   });
+
+  constructor(private fb: FormBuilder) {
+  }
 }
