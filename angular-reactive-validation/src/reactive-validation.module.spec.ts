@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ReactiveValidationModule } from './reactive-validation.module';
-import { ReactiveValidationModuleConfigurationToken } from './reactive-validation-module-configuration-token';
+import { REACTIVE_VALIDATION_MODULE_CONFIGURATION_TOKEN } from './reactive-validation-module-configuration-token';
 
 describe(`ReactiveValidationModule`, () => {
   describe(`when not calling forRoot`, () => {
@@ -12,7 +12,7 @@ describe(`ReactiveValidationModule`, () => {
     });
 
     it(`should not provide configuration`, () => {
-      expect(() => TestBed.inject(ReactiveValidationModuleConfigurationToken)).toThrowError(/No provider for/);
+      expect(() => TestBed.inject(REACTIVE_VALIDATION_MODULE_CONFIGURATION_TOKEN)).toThrowError(/No provider for/);
     });
   });
 
@@ -29,7 +29,7 @@ describe(`ReactiveValidationModule`, () => {
     });
 
     it(`should provide configuration`, () => {
-      expect(TestBed.inject(ReactiveValidationModuleConfigurationToken)).toEqual(configuration);
+      expect(TestBed.inject(REACTIVE_VALIDATION_MODULE_CONFIGURATION_TOKEN)).toEqual(configuration);
     });
   });
 });

@@ -90,7 +90,9 @@
           "options": {
             "lintFilePatterns": [
               "src/**/*.ts",
-              "src/**/*.html"
+              "src/**/*.html",
+              "angular-reactive-validation/src/**/*.ts",
+              "angular-reactive-validation/src/**/*.html"
             ]
           }
         }

@@ -13,7 +13,7 @@ export class FormDirective {
   /**
    * Observable which emits when the form is submitted.
    */
-  submitted: Observable<{}>;
+  submitted: Observable<any>;
 
   constructor(formGroupDirective: FormGroupDirective) {
     this.submitted = formGroupDirective.ngSubmit.asObservable();

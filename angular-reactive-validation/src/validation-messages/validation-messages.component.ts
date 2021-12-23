@@ -8,7 +8,7 @@ import { ValidationError } from '../validation-error';
 import { getFormControlFromContainer, isControlContainerVoidOrInitialized } from '../get-form-control-from-container';
 import { FormDirective } from '../form/form.directive';
 import { ReactiveValidationModuleConfiguration } from '../reactive-validation-module-configuration';
-import { ReactiveValidationModuleConfigurationToken } from '../reactive-validation-module-configuration-token';
+import { REACTIVE_VALIDATION_MODULE_CONFIGURATION_TOKEN } from '../reactive-validation-module-configuration-token';
 import { getControlPath } from '../get-control-path';
 
 @Component({
@@ -32,7 +32,7 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy,
   private formSubmittedSubscription = new Subscription();
 
   constructor(@Optional() private controlContainer: ControlContainer, @Optional() formSubmitDirective: FormDirective,
-    @Optional() @Inject(ReactiveValidationModuleConfigurationToken) private configuration: ReactiveValidationModuleConfiguration) {
+    @Optional() @Inject(REACTIVE_VALIDATION_MODULE_CONFIGURATION_TOKEN) private configuration: ReactiveValidationModuleConfiguration) {
       if (formSubmitDirective) {
         this.formSubmitted = false;
         this.formSubmittedSubscription.add(formSubmitDirective.submitted.subscribe(() => {
