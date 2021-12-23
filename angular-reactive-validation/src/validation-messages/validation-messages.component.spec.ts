@@ -283,8 +283,7 @@ describe('ValidationMessagesComponent', () => {
       window.onerror = onerrorBeforeTest;
     });
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    it(`validates child validation message as they are shown or hidden through *ngIf`, (done: Function) => {
+    it(`validates child validation message as they are shown or hidden through *ngIf`, (done) => {
       @Component({
         template: `
           <arv-validation-messages [for]="firstNameControl">
