@@ -37,6 +37,9 @@ steps:
 - script: npm run build:app
   displayName: 'Build App'
 
+- script: npx ng lint angular-reactive-validation
+  displayName: 'Execute Lint'
+
 - script: npx ng test --watch=false
   displayName: 'Execute Tests'
 
