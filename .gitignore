@@ -44,4 +44,3 @@ testem.log
 Thumbs.db
 
 TESTS-*.xml
-/angular-reactive-validation/node_modules/*

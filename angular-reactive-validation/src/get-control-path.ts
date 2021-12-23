@@ -7,7 +7,7 @@ import { AbstractControl } from '@angular/forms';
  *
  * Note that FormArray indexes are also put in the path, e.g.: 'person.0.name.firstName'.
  */
-export function getControlPath(control: AbstractControl): string {
+export const getControlPath = (control: AbstractControl): string => {
   const parentControl = control.parent;
   if (parentControl) {
     let path = getControlPath(parentControl);
@@ -25,4 +25,4 @@ export function getControlPath(control: AbstractControl): string {
   }
 
   return '';
-}
+};

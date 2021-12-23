@@ -9,6 +9,8 @@ import { ValidationMessageComponent } from '../validation-message/validation-mes
 import { Validators } from '../validators';
 import { ReactiveValidationModule } from '../reactive-validation.module';
 
+const isErrorEvent = (event: Event | string): event is ErrorEvent => (event as ErrorEvent).error !== undefined;
+
 describe('ValidationMessagesComponent', () => {
   describe('properties and functions', () => {
     let component: ValidationMessagesComponent;
@@ -93,10 +95,10 @@ describe('ValidationMessagesComponent', () => {
     let fixture: ComponentFixture<TestHostComponent>;
 
     describe('the default configuration validation is shown when', () => {
-      let submittedSubject: Subject<{}>;
+      let submittedSubject: Subject<Record<string,unknown>>;
 
       beforeEach(() => {
-        submittedSubject = new Subject<{}>();
+        submittedSubject = new Subject<Record<string,unknown>>();
         TestBed.configureTestingModule({
           imports: [ReactiveFormsModule],
           declarations: [ValidationMessagesComponent, ValidationMessageComponent, TestHostComponent],
@@ -157,10 +159,10 @@ describe('ValidationMessagesComponent', () => {
       });
     });
 
-    function expectValidationIsShown() {
+    const expectValidationIsShown = () => {
       expect(fixture.nativeElement.querySelector('.invalid-feedback p').textContent).toEqual('A first name is required');
       expect(fixture.nativeElement.querySelector('.last-name-required').textContent).toEqual('A last name is required');
-    }
+    };
 
     @Component({
       template: `
@@ -250,14 +252,13 @@ describe('ValidationMessagesComponent', () => {
       `
     })
     class TestHostComponent {
+      @ViewChild(ValidationMessagesComponent, { static: true }) validationMessagesComponent: ValidationMessagesComponent;
       age = new FormControl(0, [
         Validators.min(10, 'invalid age')
       ]);
       form = new FormGroup({
         age: this.age
       });
-
-      @ViewChild(ValidationMessagesComponent, { static: true }) validationMessagesComponent: ValidationMessagesComponent;
     }
 
     TestBed.configureTestingModule({
@@ -282,6 +283,7 @@ describe('ValidationMessagesComponent', () => {
       window.onerror = onerrorBeforeTest;
     });
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     it(`validates child validation message as they are shown or hidden through *ngIf`, (done: Function) => {
       @Component({
         template: `
@@ -322,7 +324,3 @@ describe('ValidationMessagesComponent', () => {
     });
   });
 });
-
-function isErrorEvent(event: Event | string): event is ErrorEvent {
-  return (<ErrorEvent>event).error !== undefined;
-}

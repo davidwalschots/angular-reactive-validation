@@ -1,8 +1,8 @@
 import { FormGroup, FormControl, ControlContainer, FormGroupDirective } from '@angular/forms';
 
-export function getFormControlFromContainer(name: string, controlContainer: ControlContainer | undefined): FormControl {
+export const getFormControlFromContainer = (name: string, controlContainer: ControlContainer | undefined): FormControl => {
   if (controlContainer) {
-    const control = (<FormGroup>controlContainer.control).controls[name];
+    const control = (controlContainer.control as FormGroup).controls[name];
     if (!control) {
       throw new Error(`There is no control named '${name}'` +
         (getPath(controlContainer).length > 0 ? ` within '${getPath(controlContainer).join('.')}'` : '') + '.');
@@ -18,13 +18,10 @@ export function getFormControlFromContainer(name: string, controlContainer: Cont
     throw new Error(`You can't pass a string to arv-validation-messages's for attribute, when the ` +
       `arv-validation-messages element is not a child of an element with a formGroupName or formGroup declaration.`);
   }
-}
+};
 
-export function isControlContainerVoidOrInitialized(controlContainer: ControlContainer | undefined) {
-  return !!(!controlContainer || (<FormGroupDirective>controlContainer).form ||
-    (controlContainer.formDirective && (<FormGroupDirective>controlContainer.formDirective).form));
-}
+export const isControlContainerVoidOrInitialized = (controlContainer: ControlContainer | undefined) =>
+!!(!controlContainer || (controlContainer as FormGroupDirective).form ||
+    (controlContainer.formDirective && (controlContainer.formDirective as FormGroupDirective).form));
 
-function getPath(controlContainer: ControlContainer): string[] {
-  return controlContainer.path || [];
-}
+const getPath = (controlContainer: ControlContainer): string[] => controlContainer.path || [];

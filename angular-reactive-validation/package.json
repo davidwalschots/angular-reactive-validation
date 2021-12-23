@@ -20,10 +20,10 @@
   "private": false,
   "dependencies": {},
   "peerDependencies": {
-    "@angular/core": "^12.2.15",
-    "@angular/common": "^12.2.15",
-    "@angular/forms": "^12.2.15",
-    "rxjs": "^6.6.7"
+    "@angular/core": "^12.0.0",
+    "@angular/common": "^12.0.0",
+    "@angular/forms": "^12.0.0",
+    "rxjs": "^6.5.3"
   },
   "ngPackage": {
     "$schema": "./node_modules/ng-packagr/ng-package.schema.json",

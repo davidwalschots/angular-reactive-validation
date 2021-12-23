@@ -22,16 +22,14 @@ import { getControlPath } from '../get-control-path';
  * ValidationMessageComponent.
  */
 export class ValidationMessagesComponent implements AfterContentInit, OnDestroy, OnInit {
+  @ContentChildren(ValidationMessageComponent) private messageComponents: QueryList<ValidationMessageComponent>;
+
   private _for: FormControl[] = [];
   private messageComponentsChangesSubscription = new Subscription();
   private controlStatusChangesSubscription = new Subscription();
 
   private formSubmitted: boolean | undefined = undefined;
   private formSubmittedSubscription = new Subscription();
-
-  @ContentChildren(ValidationMessageComponent) private messageComponents: QueryList<ValidationMessageComponent>;
-
-  private initializeForOnInit = () => {};
 
   constructor(@Optional() private controlContainer: ControlContainer, @Optional() formSubmitDirective: FormDirective,
     @Optional() @Inject(ReactiveValidationModuleConfigurationToken) private configuration: ReactiveValidationModuleConfiguration) {
@@ -46,6 +44,32 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy,
   ngOnInit() {
     this.initializeForOnInit();
   }
+
+  ngAfterContentInit() {
+    this.messageComponentsChangesSubscription.add(this.messageComponents.changes.subscribe(this.validateChildren));
+    this.validateChildren();
+
+    this._for.forEach(control => {
+      this.handleControlStatusChange(control);
+    });
+  }
+
+  ngOnDestroy() {
+    this.messageComponentsChangesSubscription.unsubscribe();
+    this.formSubmittedSubscription.unsubscribe();
+    this.controlStatusChangesSubscription.unsubscribe();
+  }
+
+  isValid(): boolean {
+    return this.getFirstErrorPerControl().length === 0;
+  }
+
+  getErrorMessages(): string[] {
+    return this.getFirstErrorPerControl().filter(error => error.hasMessage())
+      .map(error => error.getMessage());
+  }
+
+  private initializeForOnInit = () => {};
 
   @Input()
   set for(controls: FormControl | (FormControl|string)[] | string) {
@@ -76,34 +100,12 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy,
     });
   }
 
-  ngAfterContentInit() {
-    this.messageComponentsChangesSubscription.add(this.messageComponents.changes.subscribe(this.validateChildren));
-    this.validateChildren();
 
-    this._for.forEach(control => {
-      this.handleControlStatusChange(control);
-    });
-  }
-
-  ngOnDestroy() {
-    this.messageComponentsChangesSubscription.unsubscribe();
-    this.formSubmittedSubscription.unsubscribe();
-    this.controlStatusChangesSubscription.unsubscribe();
-  }
-
-  isValid(): boolean {
-    return this.getFirstErrorPerControl().length === 0;
-  }
-
-  getErrorMessages(): string[] {
-    return this.getFirstErrorPerControl().filter(error => error.hasMessage())
-      .map(error => error.getMessage());
-  }
 
   private getFirstErrorPerControl() {
-    return <ValidationError[]>this._for.filter(control => this.configuration && this.configuration.displayValidationMessageWhen ?
+    return this._for.filter(control => this.configuration && this.configuration.displayValidationMessageWhen ?
       this.configuration.displayValidationMessageWhen(control, this.formSubmitted) : control.touched || this.formSubmitted
-    ).map(ValidationError.fromFirstError).filter(value => value !== undefined);
+    ).map(ValidationError.fromFirstError).filter(value => value !== undefined) as ValidationError[];
   }
 
   /**
@@ -120,7 +122,7 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy,
         throw new Error(`Specify the FormControl for which the arv-validation-message element with key '${component.key}' ` +
           `should show messages.`);
       }
-      if (component.for && this._for.indexOf(<FormControl>component.for) === -1) {
+      if (component.for && this._for.indexOf(component.for as FormControl) === -1) {
         throw new Error(`A arv-validation-messages element with key '${component.key}' attempts to show messages ` +
           `for a FormControl that is not declared in the parent arv-validation-messages element.`);
       }
@@ -140,9 +142,7 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy,
       return;
     }
 
-    const messageComponent = this.messageComponents.find(component => {
-      return component.canHandle(error);
-    });
+    const messageComponent = this.messageComponents.find(component => component.canHandle(error));
 
     if (messageComponent) {
       messageComponent.show(error);
