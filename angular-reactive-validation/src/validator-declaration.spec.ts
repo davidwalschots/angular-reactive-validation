@@ -12,15 +12,15 @@ describe('ValidatorDeclaration', () => {
       return obj;
     };
 
-    function expectHasMessage(validatorFn: ValidatorFn) {
+    const expectHasMessage = (validatorFn: ValidatorFn) => {
       const formControl = new FormControl('');
 
       let result = validatorFn(formControl);
 
       expect(result).not.toBeNull();
-      result = <ValidationErrors> result;
+      result = result as ValidationErrors;
       expect(result[resultKey].message).toEqual(message);
-    }
+    };
 
     it(`wrapNoArgumentValidator`, () => {
       const validator = ValidatorDeclaration.wrapNoArgumentValidator(wrappedValidatorFn, resultKey);
@@ -51,15 +51,15 @@ describe('ValidatorDeclaration', () => {
       return obj;
     };
 
-    function expectHasMessage(validatorFn: ValidatorFn) {
+    const expectHasMessage = (validatorFn: ValidatorFn) => {
       const formControl = new FormControl('');
 
       let result = validatorFn(formControl);
 
       expect(result).not.toBeNull();
-      result = <ValidationErrors> result;
+      result = result as ValidationErrors;
       expect(result[resultKey].message).toEqual(message);
-    }
+    };
 
     it(`wrapNoArgumentValidator`, () => {
       const validator = ValidatorDeclaration.wrapNoArgumentValidator(wrappedValidatorFn, resultKey);
@@ -83,12 +83,10 @@ describe('ValidatorDeclaration', () => {
   describe('wrappers get the validation value by calling the input function when specified', () => {
     it(`wrapSingleArgumentValidator`, () => {
       const spyObj = {
-        validatorFn: (input1: number) => {
-          return (control: AbstractControl) => {
+        validatorFn: (input1: number) => (control: AbstractControl) => {
             expect(input1).toEqual(i);
             return {};
-          };
-        }
+          }
       };
 
       spyOn(spyObj, 'validatorFn').and.callThrough();
@@ -107,13 +105,11 @@ describe('ValidatorDeclaration', () => {
 
     it(`wrapTwoArgumentValidator`, () => {
       const spyObj = {
-        validatorFn: (input1: number, input2: number) => {
-          return (control: AbstractControl) => {
+        validatorFn: (input1: number, input2: number) => (control: AbstractControl) => {
             expect(input1).toEqual(i);
             expect(input2).toEqual(j);
             return {};
-          };
-        }
+          }
       };
 
       spyOn(spyObj, 'validatorFn').and.callThrough();

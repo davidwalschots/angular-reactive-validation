@@ -35,7 +35,7 @@ describe('Validators', () => {
       const result = combination.validatorFn(combination.control);
       expect(result).not.toBeNull(
         `A validator deemed the control value '${combination.control.value}' to be valid. This shouldn't be the case`);
-      expect((<ValidationErrors>result).message).toBeUndefined(
+      expect((result as ValidationErrors).message).toBeUndefined(
         `The angular framework uses the 'message' property. This behaviour is overwritten by the library`);
     });
   });

@@ -12,9 +12,9 @@ describe('ValidationError', () => {
     const error = ValidationError.fromFirstError(control);
 
     expect(error).not.toBeUndefined();
-    expect((<ValidationError>error).control).toEqual(control);
-    expect((<ValidationError>error).key).toEqual('required');
-    expect((<ValidationError>error).errorObject).toEqual(requiredErrorObject);
+    expect((error as ValidationError).control).toEqual(control);
+    expect((error as ValidationError).key).toEqual('required');
+    expect((error as ValidationError).errorObject).toEqual(requiredErrorObject);
   });
 
   it(`fromFirstError returns undefined when the FormControl has no errors`, () => {
@@ -37,7 +37,7 @@ describe('ValidationError', () => {
     const error = ValidationError.fromFirstError(control);
 
     expect(error).not.toBeUndefined();
-    expect((<ValidationError>error).hasMessage()).toEqual(true);
+    expect((error as ValidationError).hasMessage()).toEqual(true);
   });
 
   it(`hasMessage returns false when the errorObject doesn't contain a message`, () => {
@@ -49,7 +49,7 @@ describe('ValidationError', () => {
     const error = ValidationError.fromFirstError(control);
 
     expect(error).not.toBeUndefined();
-    expect((<ValidationError>error).hasMessage()).toEqual(false);
+    expect((error as ValidationError).hasMessage()).toEqual(false);
   });
 
   it(`getMessage returns the message from the errorObject`, () => {
@@ -64,6 +64,6 @@ describe('ValidationError', () => {
     const error = ValidationError.fromFirstError(control);
 
     expect(error).not.toBeUndefined();
-    expect((<ValidationError>error).getMessage()).toEqual(expected);
+    expect((error as ValidationError).getMessage()).toEqual(expected);
   });
 });

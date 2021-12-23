@@ -3,7 +3,7 @@ import { FormGroupDirective } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 @Directive({
-  // tslint:disable-next-line:directive-selector
+  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'form[formGroup]'
 })
 /**
@@ -13,7 +13,7 @@ export class FormDirective {
   /**
    * Observable which emits when the form is submitted.
    */
-  submitted: Observable<{}>;
+  submitted: Observable<any>;
 
   constructor(formGroupDirective: FormGroupDirective) {
     this.submitted = formGroupDirective.ngSubmit.asObservable();

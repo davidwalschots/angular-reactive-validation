@@ -12,7 +12,7 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
+    versionSpec: '14.x'
   displayName: 'Install Node.js'
 
 - script: npm install
@@ -36,6 +36,9 @@ steps:
 
 - script: npm run build:app
   displayName: 'Build App'
+
+- script: npx ng lint angular-reactive-validation
+  displayName: 'Execute Lint'
 
 - script: npx ng test --watch=false
   displayName: 'Execute Tests'

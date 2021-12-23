@@ -19,8 +19,8 @@ describe('ValidationMessageComponent', () => {
         }
       };
 
-      component = new ValidationMessageComponent(<any>undefined);
-      error = <ValidationError>ValidationError.fromFirstError(control);
+      component = new ValidationMessageComponent(undefined as any);
+      error = ValidationError.fromFirstError(control) as ValidationError;
     });
 
     it(`returns true when the error key and component key are equal (without for)`, () => {
@@ -41,7 +41,7 @@ describe('ValidationMessageComponent', () => {
     });
 
     it(`returns false when the component 'for' doesn't equal the error's control`, () => {
-      component.for = <any>{};
+      component.for = {} as any;
       component.key = 'required';
 
       const result = component.canHandle(error);
@@ -71,7 +71,7 @@ describe('ValidationMessageComponent', () => {
     });
 
     it(`are displayed by the show function`, () => {
-      const error = <ValidationError>ValidationError.fromFirstError(TestHostComponent.getFormControl());
+      const error = ValidationError.fromFirstError(TestHostComponent.getFormControl()) as ValidationError;
 
       validationMessageComponent.show(error);
 
@@ -83,7 +83,7 @@ describe('ValidationMessageComponent', () => {
     });
 
     it(`are hidden by the reset function`, () => {
-      const error = <ValidationError>ValidationError.fromFirstError(TestHostComponent.getFormControl());
+      const error = ValidationError.fromFirstError(TestHostComponent.getFormControl()) as ValidationError;
 
       validationMessageComponent.show(error);
       fixture.detectChanges();
@@ -93,7 +93,7 @@ describe('ValidationMessageComponent', () => {
     });
 
     it(`and their context is set by the show function`, () => {
-      const error = <ValidationError>ValidationError.fromFirstError(TestHostComponent.getFormControl());
+      const error = ValidationError.fromFirstError(TestHostComponent.getFormControl()) as ValidationError;
 
       validationMessageComponent.show(error);
       expect(validationMessageComponent.context).toEqual(error.errorObject);
@@ -128,14 +128,14 @@ describe('ValidationMessageComponent', () => {
       `
     })
     class TestHostComponent {
+      @ViewChild(ValidationMessageComponent, { static: true }) validationMessageComponent: ValidationMessageComponent;
+
       age = new FormControl(0, [
         Validators.min(10, 'invalid age')
       ]);
       form = new FormGroup({
         age: this.age
       });
-
-      @ViewChild(ValidationMessageComponent, { static: true }) validationMessageComponent: ValidationMessageComponent;
     }
 
     TestBed.configureTestingModule({

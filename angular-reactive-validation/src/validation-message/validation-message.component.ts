@@ -16,10 +16,6 @@ import { getFormControlFromContainer, isControlContainerVoidOrInitialized } from
  * TODO: Trigger revalidation by parent whenever [for] changes.
  */
 export class ValidationMessageComponent implements OnInit {
-  private _context: ValidationErrors | undefined;
-  private _for: FormControl | undefined;
-
-  constructor(@Optional() private controlContainer: ControlContainer) { }
 
   @Input()
   /**
@@ -43,15 +39,10 @@ export class ValidationMessageComponent implements OnInit {
    */
   key: string | undefined;
 
-  private initializeForOnInit = () => {};
+  private _context: ValidationErrors | undefined;
+  private _for: FormControl | undefined;
 
-  /**
-   * The ValidationErrors object that contains contextual information about the error, which can be used for
-   * displaying, e.g. the minimum length within the error message.
-   */
-  get context(): any {
-    return this._context;
-  }
+  constructor(@Optional() private controlContainer: ControlContainer) { }
 
   ngOnInit() {
     this.initializeForOnInit();
@@ -67,5 +58,15 @@ export class ValidationMessageComponent implements OnInit {
 
   reset() {
     this._context = undefined;
+  }
+
+  private initializeForOnInit = () => {};
+
+  /**
+   * The ValidationErrors object that contains contextual information about the error, which can be used for
+   * displaying, e.g. the minimum length within the error message.
+   */
+  get context(): any {
+    return this._context;
   }
 }

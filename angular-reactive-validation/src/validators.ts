@@ -8,6 +8,12 @@ import { ValidatorDeclaration } from './validator-declaration';
  * Code comments have been copied from the Angular source code.
  */
 export class Validators {
+/**
+ * No-op validator.
+ */
+  static nullValidator = AngularValidators.nullValidator;
+  static composeAsync = AngularValidators.composeAsync;
+
   private static minValidator = ValidatorDeclaration.wrapSingleArgumentValidator(AngularValidators.min, 'min');
   private static maxValidator = ValidatorDeclaration.wrapSingleArgumentValidator(AngularValidators.max, 'max');
   private static minLengthValidator = ValidatorDeclaration.wrapSingleArgumentValidator(AngularValidators.minLength, 'minlength');
@@ -16,12 +22,6 @@ export class Validators {
   private static requiredValidator = ValidatorDeclaration.wrapNoArgumentValidator(AngularValidators.required, 'required');
   private static requiredTrueValidator = ValidatorDeclaration.wrapNoArgumentValidator(AngularValidators.requiredTrue, 'required');
   private static emailValidator = ValidatorDeclaration.wrapNoArgumentValidator(AngularValidators.email, 'email');
-
-  /**
-   * No-op validator.
-   */
-  static nullValidator = AngularValidators.nullValidator;
-  static composeAsync = AngularValidators.composeAsync;
 
   /**
    * Compose multiple validators into a single function that returns the union

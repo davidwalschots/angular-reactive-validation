@@ -5,7 +5,7 @@ import { ValidationMessagesComponent } from './validation-messages/validation-me
 import { ValidationMessageComponent } from './validation-message/validation-message.component';
 import { FormDirective } from './form/form.directive';
 import { ReactiveValidationModuleConfiguration } from './reactive-validation-module-configuration';
-import { ReactiveValidationModuleConfigurationToken } from './reactive-validation-module-configuration-token';
+import { REACTIVE_VALIDATION_MODULE_CONFIGURATION_TOKEN } from './reactive-validation-module-configuration-token';
 
 @NgModule({
   imports: [
@@ -27,7 +27,7 @@ export class ReactiveValidationModule {
     return {
       ngModule: ReactiveValidationModule,
       providers: [{
-        provide: ReactiveValidationModuleConfigurationToken, useValue: configuration
+        provide: REACTIVE_VALIDATION_MODULE_CONFIGURATION_TOKEN, useValue: configuration
       }]
     };
   }
