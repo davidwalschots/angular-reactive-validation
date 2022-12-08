@@ -9,7 +9,7 @@
     "lint": "ng lint angular-reactive-validation",
     "e2e": "ng e2e",
     "build:app": "ng build --configuration production",
-    "build:lib": "rimraf dist && ng-packagr -p angular-reactive-validation/package.json && rimraf dist/angular-reactive-validation.tgz && cpx README.md dist/angular-reactive-validation",
+    "build:lib": "rimraf dist && ng-packagr -p angular-reactive-validation/ng-package.json && rimraf dist/angular-reactive-validation.tgz && cpx README.md dist/angular-reactive-validation",
     "publish": "npm publish dist/angular-reactive-validation"
   },
   "private": true,

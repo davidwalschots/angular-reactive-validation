@@ -24,15 +24,5 @@
     "@angular/common": "^12.0.0",
     "@angular/forms": "^12.0.0",
     "rxjs": "^6.5.3"
-  },
-  "ngPackage": {
-    "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
-    "dest": "../dist/angular-reactive-validation",
-    "lib": {
-      "entryFile": "src/public_api.ts"
-    },
-    "allowedNonPeerDependencies": [
-      "."
-    ]
   }
 }
