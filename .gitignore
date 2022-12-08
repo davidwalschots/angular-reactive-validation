@@ -44,3 +44,4 @@ testem.log
 Thumbs.db
 
 TESTS-*.xml
+/.angular/cache/*
