@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 export interface ReactiveValidationModuleConfiguration {
   /**
@@ -9,5 +9,5 @@ export interface ReactiveValidationModuleConfiguration {
    * @param formSubmitted whether the form is submitted or not. When undefined, it's not known
    * if the form is submitted, due to the form tag missing a formGroup.
    */
-  displayValidationMessageWhen?: (control: FormControl, formSubmitted: boolean | undefined) => boolean;
+  displayValidationMessageWhen?: (control: UntypedFormControl, formSubmitted: boolean | undefined) => boolean;
 }

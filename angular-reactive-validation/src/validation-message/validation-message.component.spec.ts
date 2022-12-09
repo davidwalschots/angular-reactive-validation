@@ -4,7 +4,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ValidationMessageComponent } from './validation-message.component';
 import { ValidationError } from '../validation-error';
 import { Validators } from '../validators';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 
 describe('ValidationMessageComponent', () => {
   describe('canHandle', () => {
@@ -130,10 +130,10 @@ describe('ValidationMessageComponent', () => {
     class TestHostComponent {
       @ViewChild(ValidationMessageComponent, { static: true }) validationMessageComponent: ValidationMessageComponent;
 
-      age = new FormControl(0, [
+      age = new UntypedFormControl(0, [
         Validators.min(10, 'invalid age')
       ]);
-      form = new FormGroup({
+      form = new UntypedFormGroup({
         age: this.age
       });
     }

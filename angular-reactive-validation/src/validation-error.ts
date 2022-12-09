@@ -1,17 +1,17 @@
-import { FormControl, ValidationErrors } from '@angular/forms';
+import { UntypedFormControl, ValidationErrors } from '@angular/forms';
 
 export class ValidationError {
-  control: FormControl;
+  control: UntypedFormControl;
   key: string;
   errorObject: ValidationErrors;
 
-  constructor(control: FormControl, key: string, errorObject: ValidationErrors) {
+  constructor(control: UntypedFormControl, key: string, errorObject: ValidationErrors) {
     this.control = control;
     this.key = key;
     this.errorObject = errorObject;
   }
 
-  static fromFirstError(control: FormControl): ValidationError | undefined {
+  static fromFirstError(control: UntypedFormControl): ValidationError | undefined {
     if (!control.errors) {
       return undefined;
     }

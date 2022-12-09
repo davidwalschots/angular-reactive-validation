@@ -1,5 +1,5 @@
 import { Component, Input, ViewEncapsulation, Optional, OnInit } from '@angular/core';
-import { FormControl, ValidationErrors, ControlContainer } from '@angular/forms';
+import { UntypedFormControl, ValidationErrors, ControlContainer } from '@angular/forms';
 
 import { ValidationError } from '../validation-error';
 import { getFormControlFromContainer, isControlContainerVoidOrInitialized } from '../get-form-control-from-container';
@@ -22,14 +22,14 @@ export class ValidationMessageComponent implements OnInit {
    * The FormControl for which a custom validation message should be shown. This is only required when the parent
    * ValidationMessagesComponent has multiple FormControls specified.
    */
-  set for(control: FormControl | string | undefined) {
+  set for(control: UntypedFormControl | string | undefined) {
     if (!isControlContainerVoidOrInitialized(this.controlContainer)) {
       this.initializeForOnInit = () => this.for = control;
       return;
     }
     this._for = typeof control === 'string' ? getFormControlFromContainer(control, this.controlContainer) : control;
   }
-  get for(): FormControl | string | undefined {
+  get for(): UntypedFormControl | string | undefined {
     return this._for;
   }
 
@@ -40,7 +40,7 @@ export class ValidationMessageComponent implements OnInit {
   key: string | undefined;
 
   private _context: ValidationErrors | undefined;
-  private _for: FormControl | undefined;
+  private _for: UntypedFormControl | undefined;
 
   constructor(@Optional() private controlContainer: ControlContainer) { }
 

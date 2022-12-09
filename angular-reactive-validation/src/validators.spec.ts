@@ -1,5 +1,5 @@
 import { Validators as AngularValidators, ValidationErrors } from '@angular/forms';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { Validators } from './validators';
 
@@ -7,28 +7,28 @@ describe('Validators', () => {
   it(`of the Angular framework don't contain a message property in the validation result`, () => {
     const invalidCombinations = [{
       validatorFn: AngularValidators.min(0),
-      control: new FormControl(-1)
+      control: new UntypedFormControl(-1)
     }, {
       validatorFn: AngularValidators.max(0),
-      control: new FormControl(1)
+      control: new UntypedFormControl(1)
     }, {
       validatorFn: AngularValidators.minLength(2),
-      control: new FormControl('a')
+      control: new UntypedFormControl('a')
     }, {
       validatorFn: AngularValidators.maxLength(2),
-      control: new FormControl('abc')
+      control: new UntypedFormControl('abc')
     }, {
       validatorFn: AngularValidators.pattern(/a/),
-      control: new FormControl('b')
+      control: new UntypedFormControl('b')
     }, {
       validatorFn: AngularValidators.required,
-      control: new FormControl(null)
+      control: new UntypedFormControl(null)
     }, {
       validatorFn: AngularValidators.requiredTrue,
-      control: new FormControl(false)
+      control: new UntypedFormControl(false)
     }, {
       validatorFn: AngularValidators.email,
-      control: new FormControl('davidwalschots@users@noreply.github.com')
+      control: new UntypedFormControl('davidwalschots@users@noreply.github.com')
     }];
 
     invalidCombinations.forEach(combination => {
@@ -44,47 +44,45 @@ describe('Validators', () => {
     const combinations = [{
       libraryValidatorFn: Validators.nullValidator,
       nativeValidatorFn: AngularValidators.nullValidator,
-      controls: [new FormControl(1)]
+      controls: [new UntypedFormControl(1)]
     }, {
       libraryValidatorFn: Validators.min(0, 'message'),
       nativeValidatorFn: AngularValidators.min(0),
-      controls: [new FormControl(-1), new FormControl(1)]
+      controls: [new UntypedFormControl(-1), new UntypedFormControl(1)]
     }, {
       libraryValidatorFn: Validators.max(0, 'message'),
       nativeValidatorFn: AngularValidators.max(0),
-      controls: [new FormControl(1), new FormControl(-1)]
+      controls: [new UntypedFormControl(1), new UntypedFormControl(-1)]
     }, {
       libraryValidatorFn: Validators.minLength(2, 'message'),
       nativeValidatorFn: AngularValidators.minLength(2),
-      controls: [new FormControl('a'), new FormControl('ab')]
+      controls: [new UntypedFormControl('a'), new UntypedFormControl('ab')]
     }, {
       libraryValidatorFn: Validators.maxLength(2, 'message'),
       nativeValidatorFn: AngularValidators.maxLength(2),
-      controls: [new FormControl('abc'), new FormControl('ab')]
+      controls: [new UntypedFormControl('abc'), new UntypedFormControl('ab')]
     }, {
       libraryValidatorFn: Validators.pattern(/a/, 'message'),
       nativeValidatorFn: AngularValidators.pattern(/a/),
-      controls: [new FormControl('b'), new FormControl('a')]
+      controls: [new UntypedFormControl('b'), new UntypedFormControl('a')]
     }, {
       libraryValidatorFn: Validators.required('message'),
       nativeValidatorFn: AngularValidators.required,
-      controls: [new FormControl(null), new FormControl(123)]
+      controls: [new UntypedFormControl(null), new UntypedFormControl(123)]
     }, {
       libraryValidatorFn: Validators.requiredTrue('message'),
       nativeValidatorFn: AngularValidators.requiredTrue,
-      controls: [new FormControl(false), new FormControl(true)]
+      controls: [new UntypedFormControl(false), new UntypedFormControl(true)]
     }, {
       libraryValidatorFn: Validators.email('message'),
       nativeValidatorFn: AngularValidators.email,
-      controls: [new FormControl('davidwalschots@users@noreply.github.com'), new FormControl('davidwalschots@users.noreply.github.com')]
+      controls: [new UntypedFormControl('davidwalschots@users@noreply.github.com'), new UntypedFormControl('davidwalschots@users.noreply.github.com')]
     }];
 
     combinations.forEach(combination => {
       combination.controls.forEach(control => {
         const nativeResult = combination.nativeValidatorFn(control);
         let libraryResult = combination.libraryValidatorFn(control);
-
-        libraryResult = libraryResult;
 
         // Below we perform operations to remove the message property, and replace an empty object
         // with true. This is not perfect for testing. But, the only way to work around Angular

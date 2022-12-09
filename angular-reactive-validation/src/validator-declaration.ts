@@ -9,8 +9,6 @@ export class ValidatorDeclaration {
    *
    * @param validatorFn A function you want to wrap which can validate a control.
    * @param resultKey The error key used for indicating an error result as returned from the ValidatorFn.
-   * @param message The message to display when a validation error occurs. A function can also be passed to determine
-   * the message at a later time.
    */
   static wrapNoArgumentValidator(validatorFn: ValidatorFn, resultKey: string):
     (message?: string | (() => string)) => ValidatorFn {

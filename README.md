@@ -140,7 +140,7 @@ Note that `formSubmitted` can be undefined when it's not known if the form is su
 
 Angular provides a limited set of validator functions. To declare your own validator functions _and_ combine it with this library use the `ValidatorDeclaration` class. It supports declaring validators with zero, one or two arguments.
 
-**Note** that if your validator doesn't return an object as the inner error result, but e.g. a `boolean` such as in the examples below, then this will be replaced by an object that can hold the validation message. Thus in the first example below `{ 'hasvalue': true }` becomes `{ 'hasvalue': { 'message': 'validation message' } }`.
+**Note** that if your validator doesn't return an object as the inner error result, but e.g. a `boolean` such as in the examples below, then this will be replaced by an object that can hold the validation message. Thus, in the first example below `{ 'hasvalue': true }` becomes `{ 'hasvalue': { 'message': 'validation message' } }`.
 
 ```ts
 const hasValueValidator = ValidatorDeclaration.wrapNoArgumentValidator(control => {

@@ -1,6 +1,6 @@
 import { Component, ContentChildren, QueryList, Input, ViewEncapsulation, AfterContentInit,
   OnDestroy, Optional, Inject, OnInit } from '@angular/core';
-import { FormControl, ControlContainer } from '@angular/forms';
+import { UntypedFormControl, ControlContainer } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { ValidationMessageComponent } from '../validation-message/validation-message.component';
@@ -24,7 +24,7 @@ import { getControlPath } from '../get-control-path';
 export class ValidationMessagesComponent implements AfterContentInit, OnDestroy, OnInit {
   @ContentChildren(ValidationMessageComponent) private messageComponents: QueryList<ValidationMessageComponent>;
 
-  private _for: FormControl[] = [];
+  private _for: UntypedFormControl[] = [];
   private messageComponentsChangesSubscription = new Subscription();
   private controlStatusChangesSubscription = new Subscription();
 
@@ -72,7 +72,7 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy,
   private initializeForOnInit = () => {};
 
   @Input()
-  set for(controls: FormControl | (FormControl|string)[] | string) {
+  set for(controls: UntypedFormControl | (UntypedFormControl|string)[] | string) {
     if (!isControlContainerVoidOrInitialized(this.controlContainer)) {
       this.initializeForOnInit = () => this.for = controls;
       return;
@@ -122,14 +122,14 @@ export class ValidationMessagesComponent implements AfterContentInit, OnDestroy,
         throw new Error(`Specify the FormControl for which the arv-validation-message element with key '${component.key}' ` +
           `should show messages.`);
       }
-      if (component.for && this._for.indexOf(component.for as FormControl) === -1) {
+      if (component.for && this._for.indexOf(component.for as UntypedFormControl) === -1) {
         throw new Error(`A arv-validation-messages element with key '${component.key}' attempts to show messages ` +
           `for a FormControl that is not declared in the parent arv-validation-messages element.`);
       }
     });
   }
 
-  private handleControlStatusChange(control: FormControl) {
+  private handleControlStatusChange(control: UntypedFormControl) {
     if (!this.messageComponents) {
       return;
     }
