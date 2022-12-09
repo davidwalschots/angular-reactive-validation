@@ -131,7 +131,7 @@ describe('ValidationMessagesComponent', () => {
     });
 
     describe('an alternative configuration', () => {
-      const configuration= {
+      const configuration = {
         displayValidationMessageWhen: (_: UntypedFormControl, __: boolean | undefined) => true
       };
 
