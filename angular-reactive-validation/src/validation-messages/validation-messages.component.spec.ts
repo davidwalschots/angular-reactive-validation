@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { ControlContainer, UntypedFormGroup, ReactiveFormsModule, FormGroupDirective, FormControl, FormGroup }
+import { ControlContainer, UntypedFormGroup, ReactiveFormsModule, FormGroupDirective, FormControl, FormGroup, UntypedFormControl }
 from '@angular/forms';
 import { Subject } from 'rxjs';
 
@@ -131,8 +131,8 @@ describe('ValidationMessagesComponent', () => {
     });
 
     describe('an alternative configuration', () => {
-      const configuration = {
-        displayValidationMessageWhen: () => true
+      const configuration= {
+        displayValidationMessageWhen: (_: UntypedFormControl, __: boolean | undefined) => true
       };
 
       beforeEach(() => {
@@ -154,10 +154,10 @@ describe('ValidationMessagesComponent', () => {
         expectValidationIsShown();
       });
 
-      // it(`displayValidationMessageWhen's formSubmitted is undefined when a FormDirective is not provided`, () => {
-      //   fixture.detectChanges();
-      //   expect(configuration.displayValidationMessageWhen).toHaveBeenCalledWith(jasmine.any(UntypedFormControl), undefined);
-      // });
+      it(`displayValidationMessageWhen's formSubmitted is undefined when a FormDirective is not provided`, () => {
+        fixture.detectChanges();
+        expect(configuration.displayValidationMessageWhen).toHaveBeenCalledWith(jasmine.any(UntypedFormControl), undefined);
+      });
     });
 
     const expectValidationIsShown = () => {
