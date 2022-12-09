@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -37,6 +37,6 @@ describe('FormDirective', () => {
     </form>`
   })
   class TestHostComponent {
-    form = new FormGroup({});
+    form = new UntypedFormGroup({});
   }
 });

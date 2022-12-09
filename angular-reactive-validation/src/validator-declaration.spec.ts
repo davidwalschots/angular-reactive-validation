@@ -1,4 +1,4 @@
-import { FormControl, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
+import { UntypedFormControl, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 
 import { ValidatorDeclaration } from './validator-declaration';
 
@@ -13,7 +13,7 @@ describe('ValidatorDeclaration', () => {
     };
 
     const expectHasMessage = (validatorFn: ValidatorFn) => {
-      const formControl = new FormControl('');
+      const formControl = new UntypedFormControl('');
 
       let result = validatorFn(formControl);
 
@@ -52,7 +52,7 @@ describe('ValidatorDeclaration', () => {
     };
 
     const expectHasMessage = (validatorFn: ValidatorFn) => {
-      const formControl = new FormControl('');
+      const formControl = new UntypedFormControl('');
 
       let result = validatorFn(formControl);
 
@@ -95,7 +95,7 @@ describe('ValidatorDeclaration', () => {
 
       let i = 0;
       const validatorFn = validator(() => i);
-      const formControl = new FormControl('');
+      const formControl = new UntypedFormControl('');
       for (; i < 10; i++) {
         validatorFn(formControl);
       }
@@ -119,7 +119,7 @@ describe('ValidatorDeclaration', () => {
       let i = 0;
       let j = 10;
       const validatorFn = validator(() => i, () => j);
-      const formControl = new FormControl('');
+      const formControl = new UntypedFormControl('');
       for (; i < 10; i++, j++) {
         validatorFn(formControl);
       }

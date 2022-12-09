@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Validators } from 'angular-reactive-validation';
 
 @Component({
@@ -27,6 +27,6 @@ export class AppComponent {
     ]]
   });
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: UntypedFormBuilder) {
   }
 }
