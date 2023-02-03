@@ -8,7 +8,7 @@ Run `ng build angular-reactive-validation` to build the project. The build artif
 
 ## Publishing
 
-After building your library with `ng build angular-reactive-validation`, go to the dist folder `cd dist/angular-reactive-validation` and run `npm publish`.
+After building your library with `ng build angular-reactive-validation`, go to the dist folder `cd dist/angular-reactive-validation`, copy the root `README.md` into it, and run `npm publish`.
 
 ## Running unit tests
 
