@@ -9,7 +9,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "strict": true,
     "strictPropertyInitialization": false,
     "noUnusedLocals": true,
@@ -26,8 +26,9 @@
         "./dist/angular-reactive-validation"
       ],
       "core-js/es7/reflect": [
-        "node_modules/core-js/proposals/reflect-metadata",
+        "node_modules/core-js/proposals/reflect-metadata"
       ]
-    }
+    },
+    "useDefineForClassFields": false
   }
 }
