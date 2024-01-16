@@ -3,9 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ReactiveValidationModule } from 'angular-reactive-validation';
 
-
 import { AppComponent } from './app.component';
-
 
 @NgModule({
   declarations: [

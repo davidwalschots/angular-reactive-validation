@@ -5,6 +5,7 @@ Reactive Forms validation shouldn't require the developer to write lots of HTML 
 ## Table of contents
 
 * [Installation](#installation)
+* [Compatibility](#compatibility)
 * [Basic usage](#basic-usage)
 * [Advanced validation declaration](#advanced-validation-declaration)
 * [Changing when validation messages are displayed](#changing-when-validation-messages-are-displayed)
@@ -21,8 +22,15 @@ To install this library, run:
 npm install angular-reactive-validation --save
 ```
 
-## Basic usage
+## Compatibility
+| Angular version | Package version |
+| --------------- | --------------- |
+| 16              | 10.x            |
+| 15              | 9.x             |
+| 14              | 8.x             |
 
+
+## Basic usage
 Import the `ReactiveValidationModule`:
 
 ```ts

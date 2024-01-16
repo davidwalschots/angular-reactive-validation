@@ -1,6 +1,6 @@
 {
   "name": "angular-reactive-validation",
-  "version": "9.0.1",
+  "version": "10.0.0",
   "description": "Reactive Forms validation shouldn't require the developer to write lots of HTML to show validation messages. This library makes it easy.",
   "repository": {
     "type": "git",
@@ -19,9 +19,9 @@
   "license": "MIT",
   "private": false,
   "peerDependencies": {
-    "@angular/common": "^15.0.0",
-    "@angular/core": "^15.0.0",
-    "@angular/forms": "^15.0.0",
+    "@angular/common": "^16.0.0",
+    "@angular/core": "^16.0.0",
+    "@angular/forms": "^16.0.0",
     "rxjs": "^6.5.3 || ^7.4.0"
   },
   "dependencies": {
