@@ -1,5 +1,9 @@
 # Changelog
 
+## 11.0.0
+
+* add support for Angular 17
+
 ## 10.0.0
 
 * add support for Angular 16
