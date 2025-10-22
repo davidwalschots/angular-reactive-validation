@@ -166,14 +166,15 @@ describe('ValidationMessagesComponent', () => {
     };
 
     @Component({
-      template: `
+    template: `
         <arv-validation-messages [for]="firstNameControl"></arv-validation-messages>
         <arv-validation-messages [for]="lastNameControl">
           <arv-validation-message key="required">
             <p class="last-name-required">A last name is required</p>
           </arv-validation-message>
-        </arv-validation-messages>`
-    })
+        </arv-validation-messages>`,
+    standalone: false
+})
     class TestHostComponent {
       firstNameControl: FormControl = new FormControl(null, [Validators.required('A first name is required')]);
       lastNameControl: FormControl = new FormControl(null, [Validators.required()]);
@@ -182,11 +183,12 @@ describe('ValidationMessagesComponent', () => {
 
   it(`a child validation message without 'for' specified while parent has multiple controls throws an error`, () => {
     @Component({
-      template: `
+    template: `
         <arv-validation-messages [for]="[firstNameControl, lastNameControl]">
           <arv-validation-message key="required"></arv-validation-message>
-        </arv-validation-messages>`
-    })
+        </arv-validation-messages>`,
+    standalone: false
+})
     class TestHostComponent {
       firstNameControl: FormControl = new FormControl(null);
       lastNameControl: FormControl = new FormControl(null);
@@ -204,11 +206,12 @@ describe('ValidationMessagesComponent', () => {
 
   it(`a child validation message with a 'for' specified that's not in the parent throws an error`, () => {
     @Component({
-      template: `
+    template: `
         <arv-validation-messages [for]="firstNameControl">
           <arv-validation-message [for]="lastNameControl" key="required"></arv-validation-message>
-        </arv-validation-messages>`
-    })
+        </arv-validation-messages>`,
+    standalone: false
+})
     class TestHostComponent {
       firstNameControl: FormControl = new FormControl(null);
       lastNameControl: FormControl = new FormControl(null);
@@ -227,8 +230,9 @@ describe('ValidationMessagesComponent', () => {
 
   it(`a ValidationError without a message and without a child validation message component throws an error`, () => {
     @Component({
-      template: `<arv-validation-messages [for]="firstNameControl"></arv-validation-messages>`
-    })
+    template: `<arv-validation-messages [for]="firstNameControl"></arv-validation-messages>`,
+    standalone: false
+})
     class TestHostComponent {
       firstNameControl: FormControl = new FormControl(null, [Validators.required()]);
     }
@@ -245,13 +249,14 @@ describe('ValidationMessagesComponent', () => {
 
   it('can set control by name without exception being thrown due to ControlContainer not yet being initialized', () => {
     @Component({
-      template: `
+    template: `
         <form [formGroup]="form">
           <input type="number" formControlName="age">
           <arv-validation-messages for="age"></arv-validation-messages>
         </form>
-      `
-    })
+      `,
+    standalone: false
+})
     class TestHostComponent {
       @ViewChild(ValidationMessagesComponent, { static: true }) validationMessagesComponent: ValidationMessagesComponent | undefined;
       age = new FormControl(0, [
@@ -286,11 +291,12 @@ describe('ValidationMessagesComponent', () => {
 
     it(`validates child validation message as they are shown or hidden through *ngIf`, (done) => {
       @Component({
-        template: `
+    template: `
           <arv-validation-messages [for]="firstNameControl">
             <arv-validation-message *ngIf="show" [for]="lastNameControl" key="required"></arv-validation-message>
-          </arv-validation-messages>`
-      })
+          </arv-validation-messages>`,
+    standalone: false
+})
       class TestHostComponent {
         firstNameControl: FormControl = new FormControl(null);
         lastNameControl: FormControl = new FormControl(null);

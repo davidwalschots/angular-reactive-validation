@@ -25,6 +25,7 @@ npm install angular-reactive-validation --save
 ## Compatibility
 | Angular version | Package version |
 |-----------------|-----------------|
+| 19              | 13.x            |
 | 18              | 12.x            |
 | 17              | 11.x            |
 | 16              | 10.x            |

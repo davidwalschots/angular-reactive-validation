@@ -3,8 +3,9 @@ import { FormGroupDirective } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
-  selector: 'form[formGroup]'
+    // eslint-disable-next-line @angular-eslint/directive-selector
+    selector: 'form[formGroup]',
+    standalone: false
 })
 /**
  * Encapsulates properties and events of the form and makes them available for child components.

@@ -34,8 +34,9 @@ describe('FormDirective', () => {
     template: `
     <form [formGroup]="form">
       <button type="submit"></button>
-    </form>`
-  })
+    </form>`,
+    standalone: false
+})
   class TestHostComponent {
     form = new UntypedFormGroup({});
   }
