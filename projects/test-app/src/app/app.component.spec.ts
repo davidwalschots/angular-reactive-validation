@@ -29,14 +29,16 @@ describe('AppComponent', () => {
 });
 
 @Component({
-  selector: 'arv-validation-message',
-  template: '',
+    selector: 'arv-validation-message',
+    template: '',
+    standalone: false
 })
 class MockValidationMessageComponent { }
 
 
 @Component({
-  selector: 'arv-validation-messages',
-  template: '',
+    selector: 'arv-validation-messages',
+    template: '',
+    standalone: false
 })
 class MockValidationMessagesComponent { }

@@ -100,11 +100,12 @@ describe('ValidationMessageComponent', () => {
     });
 
     @Component({
-      template: `
+    template: `
       <arv-validation-message #minlengthValidation key="minlength">
         <p class="message">The message is shown. requiredLength: {{minlengthValidation.context?.requiredLength}}</p>
-      </arv-validation-message>`
-    })
+      </arv-validation-message>`,
+    standalone: false
+})
     class TestHostComponent {
       @ViewChild(ValidationMessageComponent, {static: true}) validationMessageComponent: ValidationMessageComponent | undefined;
 
@@ -120,13 +121,14 @@ describe('ValidationMessageComponent', () => {
 
   it('can set control by name without exception being thrown due to ControlContainer not yet being initialized', () => {
     @Component({
-      template: `
+    template: `
       <form [formGroup]="form">
         <arv-validation-message for="age" key="min">
         </arv-validation-message>
       </form>
-      `
-    })
+      `,
+    standalone: false
+})
     class TestHostComponent {
       @ViewChild(ValidationMessageComponent, { static: true }) validationMessageComponent: ValidationMessageComponent | undefined;
 

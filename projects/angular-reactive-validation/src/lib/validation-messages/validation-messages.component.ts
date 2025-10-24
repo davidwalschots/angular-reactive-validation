@@ -12,9 +12,10 @@ import { REACTIVE_VALIDATION_MODULE_CONFIGURATION_TOKEN } from '../reactive-vali
 import { getControlPath } from '../get-control-path';
 
 @Component({
-  selector: 'arv-validation-messages',
-  templateUrl: './validation-messages.component.html',
-  encapsulation: ViewEncapsulation.None
+    selector: 'arv-validation-messages',
+    templateUrl: './validation-messages.component.html',
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 /**
  * The ValidationMessagesComponent shows validation messages for one to many FormControls. It either shows

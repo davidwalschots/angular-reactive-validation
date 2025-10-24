@@ -5,9 +5,10 @@ import { ValidationError } from '../validation-error';
 import { getFormControlFromContainer, isControlContainerVoidOrInitialized } from '../get-form-control-from-container';
 
 @Component({
-  selector: 'arv-validation-message',
-  templateUrl: './validation-message.component.html',
-  encapsulation: ViewEncapsulation.None
+    selector: 'arv-validation-message',
+    templateUrl: './validation-message.component.html',
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 /**
  * The ValidationMessageComponent lets the developer specify a custom visual style and custom error message
